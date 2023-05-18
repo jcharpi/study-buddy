@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { RootState } from "../app/store"
 
-interface Task {
+export interface Task {
 	taskName: string
 	timeLimit: number
 }
@@ -11,28 +11,15 @@ export interface TaskState {
 }
 
 const initialState: TaskState = {
-	value: [
-		{
-			taskName: "test1",
-			timeLimit: 20,
-		},
-		{
-			taskName: "test2",
-			timeLimit: 20,
-		},
-		{
-			taskName: "test3",
-			timeLimit: 20,
-		},
-	],
+	value: [],
 }
 
 export const taskSlice = createSlice({
 	name: "tasks",
 	initialState,
 	reducers: {
-		addTask: (state, action: PayloadAction<string>) => {
-			state.value = [...state.value, {taskName: action.payload, timeLimit: 20}]
+		addTask: (state, action: PayloadAction<Task>) => {
+			state.value = [...state.value, action.payload]
 		},
 	},
 })

@@ -16,7 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 const height = Dimensions.get("screen").height
-console.log(height)
+
 const rem = height > 830 ? 24 : 19
 
 
@@ -25,7 +25,6 @@ EStyleSheet.build({
 })
 
 export default function App() {
-  AsyncStorage.clear()
   const theme = useTheme()
 	theme.colors.secondaryContainer = "transparent"
   theme.colors.background = "white"

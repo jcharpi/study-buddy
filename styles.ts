@@ -6,7 +6,10 @@ export default EStyleSheet.create({
     backgroundColor: 'white',
   },
   task: {
-    borderWidth: 2,
+    flex: 1, 
+    flexDirection: "row", 
+    justifyContent: "center",
+    maxHeight: 200
   },
   enterTaskTitle: {
     marginTop: '3rem',
@@ -16,13 +19,27 @@ export default EStyleSheet.create({
   },
   enterTaskInput: {
     fontSize: 20,
+    marginHorizontal: "10%",
+  },
+  enterTaskLimitInput: {
+    marginTop: "-12.5%", 
+  },
+  enterTaskLimitInputOutline: {
+    borderTopLeftRadius: 0,
+		borderTopRightRadius: 0,
+  },
+  enterTaskLimitContainer: {
+    flexDirection: "row",
+    alignItems: "space-around",
+    alignContent:"center",
+    marginTop: "-11%"
   },
   enterTaskLayout: {
-    marginHorizontal: "10%"
+    height: 200, 
+    width: "80%"
   },
   enterTaskOutline: {
     borderRadius: 9,
     borderWidth: 2,
-  }
-
+  },
 })
