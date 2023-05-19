@@ -26,6 +26,7 @@ EStyleSheet.build({
 
 export default function App() {
   const theme = useTheme()
+  theme.colors.primary = "black"
 	theme.colors.secondaryContainer = "transparent"
   theme.colors.background = "white"
   

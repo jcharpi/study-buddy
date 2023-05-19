@@ -1,5 +1,5 @@
 // REACT & EXPO
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Animated, Keyboard, Pressable, View } from "react-native"
 import { IconButton, Text, TextInput } from "react-native-paper"
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel"
@@ -10,6 +10,8 @@ import { addTask, selectTasks, setTasks } from "../reducers/taskSlice"
 
 // STYLES
 import styles from "../styles"
+
+// ANIMATIONS
 import brownShape from "../images/brownShape.png"
 import greenShape from "../images/greenShape.png"
 import greyShape from "../images/greyShape.png"
@@ -25,6 +27,7 @@ import {
 	greyAnimatePosY,
 	greyAnimateRot,
 } from "../animations"
+import MemoizedShapes from "../components/MemoizedShapes"
 
 interface Input {
 	inputMode: string
@@ -53,17 +56,14 @@ export default function TaskInputPage() {
 	const greyPosY = useRef(new Animated.Value(0)).current
 	const greyRot = useRef(new Animated.Value(0.5)).current
 
-	const RotateData = useCallback(
-		(shapeRotate: Animated.Value) =>
-			shapeRotate.interpolate({
-				inputRange: [0, 1],
-				outputRange: ["0deg", "360deg"],
-			}),
-		[]
-	)
+	const rotateData = (shapeRotate: Animated.Value) =>
+		shapeRotate.interpolate({
+			inputRange: [0, 1],
+			outputRange: ["0deg", "360deg"],
+		})
 
-	const brownAnimate = useCallback(() => {
-		Animated.parallel([
+	const animateShapes = () => {
+		return Animated.parallel([
 			brownAnimatePosX(brownPosX),
 			brownAnimatePosY(brownPosY),
 			brownAnimateRot(brownRot, 0.8),
@@ -74,10 +74,10 @@ export default function TaskInputPage() {
 			greyAnimatePosY(greyPosY),
 			greyAnimateRot(greyRot, 0.5),
 		]).start()
-	}, [])
+	}
 
 	useEffect(() => {
-		brownAnimate()
+		animateShapes()
 	}, [])
 
 	const input: Input[] = [
@@ -108,7 +108,7 @@ export default function TaskInputPage() {
 			inputRef.current?.next({ animated: true })
 		} else {
 			dispatch(
-				addTask({ taskName: taskName.trim(), timeLimit: parseInt(timeLimit) })
+				addTask({ taskName: taskName.trim(), timeLimit: +timeLimit })
 			)
 			setTaskName("")
 			setTimeLimit("")
@@ -118,24 +118,23 @@ export default function TaskInputPage() {
 		}
 	}
 
-	const renderTask = ({ item, index }: any) => {
+	const renderTask = ({ item }: any) => {
 		return (
 			<Pressable
 				onLongPress={() => removeTaskByName(item.taskName)}
 				style={styles.task}
 			>
 				<Text style={{ fontSize: 25 }}>{item.taskName}</Text>
-				<Text style={{ fontSize: 15 }}>
+				<Text style={{ fontSize: 20 }}>
 					{item.timeLimit} {item.timeLimit === 1 ? "minute" : "minutes"}
 				</Text>
 			</Pressable>
 		)
 	}
 
-	const renderInput = ({ item, index }: any) => {
+	const renderInput = ({ item }: any) => {
 		return (
 			<TextInput
-				activeOutlineColor="black"
 				autoCapitalize="sentences"
 				autoComplete="off"
 				clearButtonMode="while-editing"
@@ -150,7 +149,6 @@ export default function TaskInputPage() {
 				outlineColor="black"
 				outlineStyle={[styles.enterTaskOutline]}
 				placeholder={item.placeholder}
-				selectionColor="black"
 				style={[styles.enterTaskInput]}
 				value={item.state}
 			/>
@@ -167,51 +165,22 @@ export default function TaskInputPage() {
 	}, [tasks])
 
 	return (
-		<View style={styles.container}>
-			<Animated.View>
-				<Animated.Image
-					source={brownShape}
-					resizeMode="contain"
-					style={[
-						styles.brownShapeStyle,
-						{
-							transform: [
-								{ translateX: brownPosX },
-								{ translateY: brownPosY },
-								{ rotateZ: RotateData(brownRot) },
-							],
-						},
-					]}
-				/>
-				<Animated.Image
-					source={greenShape}
-					resizeMode="cover"
-					style={[
-						styles.greenShapeStyle,
-						{
-							transform: [
-								{ translateX: greenPosX },
-								{ translateY: greenPosY },
-								{ rotateZ: RotateData(greenRot) },
-							],
-						},
-					]}
-				/>
-				<Animated.Image
-					source={greyShape}
-					resizeMode="cover"
-					style={[
-						styles.greyShapeStyle,
-						{
-							transform: [
-								{ translateX: greyPosX },
-								{ translateY: greyPosY },
-								{ rotateZ: RotateData(greyRot) },
-							],
-						},
-					]}
-				/>
-			</Animated.View>
+		<Pressable onPress={Keyboard.dismiss} style={styles.container}>
+			<MemoizedShapes
+				brownShape={brownShape}
+				brownPosX={brownPosX}
+				brownPosY={brownPosY}
+				brownRot={brownRot}
+				greenShape={greenShape}
+				greenPosX={greenPosX}
+				greenPosY={greenPosY}
+				greenRot={greenRot}
+				greyShape={greyShape}
+				greyPosX={greyPosX}
+				greyPosY={greyPosY}
+				greyRot={greyRot}
+				rotateData={rotateData}
+			/>
 
 			<Text variant="headlineLarge" style={styles.enterTaskTitle}>
 				Good Morning!
@@ -230,7 +199,6 @@ export default function TaskInputPage() {
 					pagingEnabled={true}
 					overscrollEnabled={false}
 					snapEnabled={true}
-					onSnapToItem={(index) => {}}
 					renderItem={renderTask}
 				/>
 			</View>
@@ -245,7 +213,6 @@ export default function TaskInputPage() {
 					pagingEnabled={true}
 					overscrollEnabled={false}
 					snapEnabled={true}
-					onSnapToItem={(index) => {}}
 					renderItem={renderInput}
 				/>
 			</View>
@@ -272,6 +239,6 @@ export default function TaskInputPage() {
 					style={{ borderRadius: 9, width: 140 }}
 				/>
 			</View>
-		</View>
+		</Pressable>
 	)
 }
