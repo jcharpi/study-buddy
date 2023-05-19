@@ -1,49 +1,35 @@
 // REACT & EXPO
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { Keyboard, Pressable, View } from "react-native"
 import { IconButton, Text, TextInput } from "react-native-paper"
-import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel"
+import { ICarouselInstance } from "react-native-reanimated-carousel"
 import * as Haptics from "expo-haptics"
 
 // REDUX
 import { useAppDispatch, useAppSelector } from "../app/hooks"
-import { addTask, selectTasks, setTasks } from "../reducers/taskSlice"
+import {
+	addTask,
+	selectTasks,
+	setTaskName,
+	setTasks,
+	setTimeLimit,
+} from "../reducers/taskSlice"
 
 // STYLES
 import styles from "../styles"
 
-// ANIMATIONS
+// PAGES
 import MemoizedShapes from "../components/MemoizedShapes"
-
-interface Input {
-	inputMode: string
-	placeholder: string
-	state: string
-	setState: React.Dispatch<React.SetStateAction<string>>
-}
+import { CarouselView } from "./../components/CarouselView"
 
 export default function TaskInputPage() {
 	const dispatch = useAppDispatch()
-	const tasks = useAppSelector(selectTasks)
-	const [taskName, setTaskName] = useState("")
-	const [timeLimit, setTimeLimit] = useState("")
+	const tasks = useAppSelector(selectTasks).tasks
+	const taskName = useAppSelector(selectTasks).taskName
+	const timeLimit = useAppSelector(selectTasks).timeLimit
+
 	const taskRef = useRef<ICarouselInstance>(null)
 	const inputRef = useRef<ICarouselInstance>(null)
-
-	const input: Input[] = [
-		{
-			inputMode: "text",
-			placeholder: "Enter task name",
-			state: taskName,
-			setState: setTaskName,
-		},
-		{
-			inputMode: "numeric",
-			placeholder: "Time limit in minutes",
-			state: timeLimit,
-			setState: setTimeLimit,
-		},
-	]
 
 	function removeTaskByName(name: string) {
 		dispatch(setTasks(tasks.filter((task) => task.taskName !== name)))
@@ -58,8 +44,8 @@ export default function TaskInputPage() {
 			inputRef.current?.next({ animated: true })
 		} else {
 			dispatch(addTask({ taskName: taskName.trim(), timeLimit: +timeLimit }))
-			setTaskName("")
-			setTimeLimit("")
+			dispatch(setTaskName(""))
+			dispatch(setTimeLimit(""))
 			inputRef.current?.prev({ animated: true })
 			Keyboard.dismiss()
 			Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
@@ -120,38 +106,14 @@ export default function TaskInputPage() {
 				Good Morning!
 			</Text>
 
-			<View style={styles.taskContainer}>
-				<Carousel
-					loop
-					enabled={false}
-					ref={taskRef}
-					vertical={true}
-					autoPlay={tasks.length > 1}
-					autoPlayInterval={2100}
-					height={130}
-					data={tasks}
-					pagingEnabled={true}
-					overscrollEnabled={false}
-					snapEnabled={true}
-					renderItem={renderTask}
-				/>
-			</View>
-			<View style={styles.taskContainer}>
-				<Carousel
-					loop={false}
-					ref={inputRef}
-					vertical={false}
-					height={70}
-					width={320}
-					data={input}
-					pagingEnabled={true}
-					overscrollEnabled={false}
-					snapEnabled={true}
-					renderItem={renderInput}
-				/>
-			</View>
+			<CarouselView
+				taskRef={taskRef}
+				renderTask={renderTask}
+				inputRef={inputRef}
+				renderInput={renderInput}
+			/>
 
-			<View style={{ flexDirection: "row", alignSelf: "center", gap: 5 }}>
+			<View style={styles.buttonContainer}>
 				<IconButton
 					icon="plus"
 					mode="contained"

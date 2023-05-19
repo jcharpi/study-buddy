@@ -35,7 +35,11 @@ export default EStyleSheet.create({
 		borderRadius: 9,
 		borderWidth: 2,
 	},
-
+	buttonContainer: {
+		flexDirection: "row",
+		alignSelf: "center",
+		gap: 5,
+	},
 	brownShapeStyle: {
 		position: "absolute",
 		left: -100,
