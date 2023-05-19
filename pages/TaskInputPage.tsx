@@ -12,11 +12,18 @@ import { addTask, selectTasks, setTasks } from "../reducers/taskSlice"
 import styles from "../styles"
 import brownShape from "../images/brownShape.png"
 import greenShape from "../images/greenShape.png"
+import greyShape from "../images/greyShape.png"
 
 import {
 	brownAnimatePosX,
 	brownAnimatePosY,
 	brownAnimateRot,
+	greenAnimatePosX,
+	greenAnimatePosY,
+	greenAnimateRot,
+  greyAnimatePosX,
+  greyAnimatePosY,
+  greyAnimateRot,
 } from "../animations"
 
 interface Input {
@@ -33,29 +40,40 @@ export default function TaskInputPage() {
 	const [timeLimit, setTimeLimit] = useState("")
 	const taskRef = useRef<ICarouselInstance>(null)
 	const inputRef = useRef<ICarouselInstance>(null)
-	
-  const brownPosX = useRef(new Animated.Value(0)).current
+
+	const brownPosX = useRef(new Animated.Value(0)).current
 	const brownPosY = useRef(new Animated.Value(0)).current
 	const brownRot = useRef(new Animated.Value(0.8)).current
-  
-  const greenPosX = useRef(new Animated.Value(0)).current
+
+	const greenPosX = useRef(new Animated.Value(0)).current
 	const greenPosY = useRef(new Animated.Value(0)).current
 	const greenRot = useRef(new Animated.Value(0.3)).current
-  
-	const RotateData = useCallback((shapeRotate: Animated.Value) => 
-    shapeRotate.interpolate({
-      inputRange: [0, 1],
-      outputRange: ["0deg", "360deg"],
-    }), [])
+
+	const greyPosX = useRef(new Animated.Value(0)).current
+	const greyPosY = useRef(new Animated.Value(0)).current
+	const greyRot = useRef(new Animated.Value(0.5)).current
+
+	const RotateData = useCallback(
+		(shapeRotate: Animated.Value) =>
+			shapeRotate.interpolate({
+				inputRange: [0, 1],
+				outputRange: ["0deg", "360deg"],
+			}),
+		[]
+	)
 
 	const brownAnimate = useCallback(() => {
-		Animated.loop(
-			Animated.parallel([
-				brownAnimatePosX(brownPosX),
-				brownAnimatePosY(brownPosY),
-				brownAnimateRot(brownRot),
-			])
-		).start()
+		Animated.parallel([
+			brownAnimatePosX(brownPosX),
+			brownAnimatePosY(brownPosY),
+			brownAnimateRot(brownRot, 0.8),
+			greenAnimatePosX(greenPosX),
+			greenAnimatePosY(greenPosY),
+			greenAnimateRot(greenRot, 0.3),
+      greyAnimatePosX(greyPosX),
+      greyAnimatePosY(greyPosY),
+			greyAnimateRot(greyRot, 0.5),
+		]).start()
 	}, [])
 
 	useEffect(() => {
@@ -147,22 +165,55 @@ export default function TaskInputPage() {
 			})
 		}, 100)
 	}, [tasks])
+
 	return (
 		<View style={styles.container}>
 			<Animated.View>
 				<Animated.Image
 					source={brownShape}
-					resizeMode="cover"
+					resizeMode="contain"
 					style={{
 						position: "absolute",
 						left: -100,
-						top: 0,
+						top: -100,
 						height: 200,
 						width: 200,
 						transform: [
 							{ translateX: brownPosX },
 							{ translateY: brownPosY },
 							{ rotateZ: RotateData(brownRot) },
+						],
+					}}
+				/>
+				<Animated.Image
+					source={greenShape}
+					resizeMode="cover"
+					style={{
+						position: "absolute",
+						left: -100,
+						top: Dimensions.get("screen").height / 2 - 100,
+						height: 200,
+						width: 200,
+						transform: [
+							{ translateX: greenPosX },
+							{ translateY: greenPosY },
+							{ rotateZ: RotateData(greenRot) },
+						],
+					}}
+				/>
+				<Animated.Image
+					source={greyShape}
+					resizeMode="cover"
+					style={{
+						position: "absolute",
+						left: Dimensions.get('screen').width - 100,
+						top: Dimensions.get("screen").height - 200,
+						height: 200,
+						width: 200,
+						transform: [
+							{ translateX: greyPosX },
+							{ translateY: greyPosY },
+							{ rotateZ: RotateData(greyRot) },
 						],
 					}}
 				/>
