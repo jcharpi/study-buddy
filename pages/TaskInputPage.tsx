@@ -8,6 +8,7 @@ import * as Haptics from "expo-haptics"
 // REDUX
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 import {
+  Status,
 	addTask,
 	selectTasks,
 	setTaskName,
@@ -44,7 +45,7 @@ export default function TaskInputPage() {
 		) {
 			inputRef.current?.next({ animated: true })
 		} else {
-			dispatch(addTask({ taskName: taskName.trim(), timeLimit: +timeLimit }))
+			dispatch(addTask({ taskName: taskName.trim(), timeLimit: +timeLimit, status: Status.INCOMPLETE, progress: 0 }))
 			dispatch(setTaskName(""))
 			dispatch(setTimeLimit(""))
 			inputRef.current?.prev({ animated: true })
@@ -94,7 +95,7 @@ export default function TaskInputPage() {
 		<Pressable onPress={Keyboard.dismiss} style={styles.container}>
 			<MemoizedShapes />
 
-			<Text variant="headlineLarge" style={styles.enterTaskTitle}>
+			<Text variant="headlineLarge" style={styles.title}>
 				Good Morning!
 			</Text>
 

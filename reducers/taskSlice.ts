@@ -1,9 +1,17 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { RootState } from "../app/store"
 
+export enum Status {
+  COMPLETE = "complete",
+  INCOMPLETE = "incomplete",
+  IN_PROGRESS = "in_progress"
+}
+
 export interface Task {
 	taskName: string
 	timeLimit: number
+  status: Status
+  progress: number
 }
 
 export interface TaskState {

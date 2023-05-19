@@ -21,7 +21,7 @@ export default EStyleSheet.create({
 		backgroundColor: "white",
 		height: 90,
 	},
-	enterTaskTitle: {
+	title: {
 		marginTop: "3rem",
 		marginLeft: "1rem",
 		marginBottom: "0.5rem",

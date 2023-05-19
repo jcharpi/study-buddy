@@ -9,6 +9,7 @@ import { Provider } from 'react-redux'
 
 // PAGES
 import TaskInputPage from './pages/TaskInputPage'
+import TaskOverviewPage from './pages/TaskOverviewPage'
 
 // STYLES
 import EStyleSheet from 'react-native-extended-stylesheet'
@@ -33,7 +34,8 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <TaskInputPage />
+        {/* <TaskInputPage/> */}
+        <TaskOverviewPage/>
       </PersistGate>
     </Provider>
   )
