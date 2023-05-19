@@ -1,5 +1,5 @@
 // REACT
-import React from "react"
+import React, { useEffect } from "react"
 import { View } from "react-native"
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel"
 
@@ -25,13 +25,13 @@ export function CarouselView({
 }: {
 	taskRef: React.RefObject<ICarouselInstance>
 	renderTask: ({ item }: any) => JSX.Element
-	inputRef: React.RefObject<ICarouselInstance>,
-  renderInput: ({ item }: any) => JSX.Element
+	inputRef: React.RefObject<ICarouselInstance>
+	renderInput: ({ item }: any) => JSX.Element
 }) {
-  const dispatch = useAppDispatch()
+	const dispatch = useAppDispatch()
 	const tasks = useAppSelector(selectTasks).tasks
-  const taskName = useAppSelector(selectTasks).taskName
-  const timeLimit = useAppSelector(selectTasks).timeLimit
+	const taskName = useAppSelector(selectTasks).taskName
+	const timeLimit = useAppSelector(selectTasks).timeLimit
 
 	const input: Input[] = [
 		{
@@ -47,6 +47,15 @@ export function CarouselView({
 			setState: (value: string) => dispatch(setTimeLimit(value)),
 		},
 	]
+
+	useEffect(() => {
+		setTimeout(() => {
+			taskRef.current?.scrollTo({
+				index: tasks.length - 1,
+				animated: false,
+			})
+		}, 100)
+	}, [tasks])
 
 	return (
 		<>
