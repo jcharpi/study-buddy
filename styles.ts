@@ -1,16 +1,17 @@
 import EStyleSheet from "react-native-extended-stylesheet"
+import { Dimensions } from "react-native"
 
 export default EStyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "white",
-    marginTop: "1.75rem",
+		marginTop: "1.75rem",
 	},
 	taskContainer: {
-    marginTop: "1rem",
+		marginTop: "1rem",
 		maxHeight: 200,
-    width: 300,
-    alignSelf: "center"
+		width: 300,
+		alignSelf: "center",
 	},
 	task: {
 		borderRadius: 9,
@@ -33,5 +34,27 @@ export default EStyleSheet.create({
 	enterTaskOutline: {
 		borderRadius: 9,
 		borderWidth: 2,
+	},
+
+	brownShapeStyle: {
+		position: "absolute",
+		left: -100,
+		top: -100,
+		height: 200,
+		width: 200,
+	},
+	greenShapeStyle: {
+		position: "absolute",
+		left: -100,
+		top: Dimensions.get("screen").height / 2 - 100,
+		height: 200,
+		width: 200,
+	},
+	greyShapeStyle: {
+		position: "absolute",
+		left: Dimensions.get("screen").width - 100,
+		top: Dimensions.get("screen").height - 200,
+		height: 200,
+		width: 200,
 	},
 })

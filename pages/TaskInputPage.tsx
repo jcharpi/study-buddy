@@ -1,6 +1,6 @@
 // REACT & EXPO
 import { useCallback, useEffect, useRef, useState } from "react"
-import { Animated, Dimensions, Keyboard, Pressable, View } from "react-native"
+import { Animated, Keyboard, Pressable, View } from "react-native"
 import { IconButton, Text, TextInput } from "react-native-paper"
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel"
 import * as Haptics from "expo-haptics"
@@ -21,9 +21,9 @@ import {
 	greenAnimatePosX,
 	greenAnimatePosY,
 	greenAnimateRot,
-  greyAnimatePosX,
-  greyAnimatePosY,
-  greyAnimateRot,
+	greyAnimatePosX,
+	greyAnimatePosY,
+	greyAnimateRot,
 } from "../animations"
 
 interface Input {
@@ -70,8 +70,8 @@ export default function TaskInputPage() {
 			greenAnimatePosX(greenPosX),
 			greenAnimatePosY(greenPosY),
 			greenAnimateRot(greenRot, 0.3),
-      greyAnimatePosX(greyPosX),
-      greyAnimatePosY(greyPosY),
+			greyAnimatePosX(greyPosX),
+			greyAnimatePosY(greyPosY),
 			greyAnimateRot(greyRot, 0.5),
 		]).start()
 	}, [])
@@ -172,50 +172,44 @@ export default function TaskInputPage() {
 				<Animated.Image
 					source={brownShape}
 					resizeMode="contain"
-					style={{
-						position: "absolute",
-						left: -100,
-						top: -100,
-						height: 200,
-						width: 200,
-						transform: [
-							{ translateX: brownPosX },
-							{ translateY: brownPosY },
-							{ rotateZ: RotateData(brownRot) },
-						],
-					}}
+					style={[
+						styles.brownShapeStyle,
+						{
+							transform: [
+								{ translateX: brownPosX },
+								{ translateY: brownPosY },
+								{ rotateZ: RotateData(brownRot) },
+							],
+						},
+					]}
 				/>
 				<Animated.Image
 					source={greenShape}
 					resizeMode="cover"
-					style={{
-						position: "absolute",
-						left: -100,
-						top: Dimensions.get("screen").height / 2 - 100,
-						height: 200,
-						width: 200,
-						transform: [
-							{ translateX: greenPosX },
-							{ translateY: greenPosY },
-							{ rotateZ: RotateData(greenRot) },
-						],
-					}}
+					style={[
+						styles.greenShapeStyle,
+						{
+							transform: [
+								{ translateX: greenPosX },
+								{ translateY: greenPosY },
+								{ rotateZ: RotateData(greenRot) },
+							],
+						},
+					]}
 				/>
 				<Animated.Image
 					source={greyShape}
 					resizeMode="cover"
-					style={{
-						position: "absolute",
-						left: Dimensions.get('screen').width - 100,
-						top: Dimensions.get("screen").height - 200,
-						height: 200,
-						width: 200,
-						transform: [
-							{ translateX: greyPosX },
-							{ translateY: greyPosY },
-							{ rotateZ: RotateData(greyRot) },
-						],
-					}}
+					style={[
+						styles.greyShapeStyle,
+						{
+							transform: [
+								{ translateX: greyPosX },
+								{ translateY: greyPosY },
+								{ rotateZ: RotateData(greyRot) },
+							],
+						},
+					]}
 				/>
 			</Animated.View>
 
