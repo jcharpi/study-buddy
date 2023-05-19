@@ -1,9 +1,10 @@
 // REACT & EXPO
 import { useEffect, useRef, useState } from "react"
-import { Animated, Keyboard, Pressable, View } from "react-native"
+import { Keyboard, Pressable, View } from "react-native"
 import { IconButton, Text, TextInput } from "react-native-paper"
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel"
 import * as Haptics from "expo-haptics"
+
 // REDUX
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 import { addTask, selectTasks, setTasks } from "../reducers/taskSlice"
@@ -12,21 +13,6 @@ import { addTask, selectTasks, setTasks } from "../reducers/taskSlice"
 import styles from "../styles"
 
 // ANIMATIONS
-import brownShape from "../images/brownShape.png"
-import greenShape from "../images/greenShape.png"
-import greyShape from "../images/greyShape.png"
-
-import {
-	brownAnimatePosX,
-	brownAnimatePosY,
-	brownAnimateRot,
-	greenAnimatePosX,
-	greenAnimatePosY,
-	greenAnimateRot,
-	greyAnimatePosX,
-	greyAnimatePosY,
-	greyAnimateRot,
-} from "../animations"
 import MemoizedShapes from "../components/MemoizedShapes"
 
 interface Input {
@@ -43,42 +29,6 @@ export default function TaskInputPage() {
 	const [timeLimit, setTimeLimit] = useState("")
 	const taskRef = useRef<ICarouselInstance>(null)
 	const inputRef = useRef<ICarouselInstance>(null)
-
-	const brownPosX = useRef(new Animated.Value(0)).current
-	const brownPosY = useRef(new Animated.Value(0)).current
-	const brownRot = useRef(new Animated.Value(0.8)).current
-
-	const greenPosX = useRef(new Animated.Value(0)).current
-	const greenPosY = useRef(new Animated.Value(0)).current
-	const greenRot = useRef(new Animated.Value(0.3)).current
-
-	const greyPosX = useRef(new Animated.Value(0)).current
-	const greyPosY = useRef(new Animated.Value(0)).current
-	const greyRot = useRef(new Animated.Value(0.5)).current
-
-	const rotateData = (shapeRotate: Animated.Value) =>
-		shapeRotate.interpolate({
-			inputRange: [0, 1],
-			outputRange: ["0deg", "360deg"],
-		})
-
-	const animateShapes = () => {
-		return Animated.parallel([
-			brownAnimatePosX(brownPosX),
-			brownAnimatePosY(brownPosY),
-			brownAnimateRot(brownRot, 0.8),
-			greenAnimatePosX(greenPosX),
-			greenAnimatePosY(greenPosY),
-			greenAnimateRot(greenRot, 0.3),
-			greyAnimatePosX(greyPosX),
-			greyAnimatePosY(greyPosY),
-			greyAnimateRot(greyRot, 0.5),
-		]).start()
-	}
-
-	useEffect(() => {
-		animateShapes()
-	}, [])
 
 	const input: Input[] = [
 		{
@@ -107,9 +57,7 @@ export default function TaskInputPage() {
 		) {
 			inputRef.current?.next({ animated: true })
 		} else {
-			dispatch(
-				addTask({ taskName: taskName.trim(), timeLimit: +timeLimit })
-			)
+			dispatch(addTask({ taskName: taskName.trim(), timeLimit: +timeLimit }))
 			setTaskName("")
 			setTimeLimit("")
 			inputRef.current?.prev({ animated: true })
@@ -166,21 +114,7 @@ export default function TaskInputPage() {
 
 	return (
 		<Pressable onPress={Keyboard.dismiss} style={styles.container}>
-			<MemoizedShapes
-				brownShape={brownShape}
-				brownPosX={brownPosX}
-				brownPosY={brownPosY}
-				brownRot={brownRot}
-				greenShape={greenShape}
-				greenPosX={greenPosX}
-				greenPosY={greenPosY}
-				greenRot={greenRot}
-				greyShape={greyShape}
-				greyPosX={greyPosX}
-				greyPosY={greyPosY}
-				greyRot={greyRot}
-				rotateData={rotateData}
-			/>
+			<MemoizedShapes />
 
 			<Text variant="headlineLarge" style={styles.enterTaskTitle}>
 				Good Morning!

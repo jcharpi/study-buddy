@@ -1,40 +1,64 @@
-import React, { memo, useEffect } from "react"
+// REACT
+import React, { memo, useEffect, useRef } from "react"
 import { Animated } from "react-native"
+
+// STYLES
 import styles from "../styles"
-function MemoizedShapes({
-	brownShape,
-	brownPosX,
-	brownPosY,
-	brownRot,
-	greenShape,
-	greenPosX,
-	greenPosY,
-	greenRot,
-	greyShape,
-	greyPosX,
-	greyPosY,
-	greyRot,
-	rotateData,
-}: {
-	brownShape: Animated.Value
-	brownPosX: Animated.Value
-	brownPosY: Animated.Value
-	brownRot: Animated.Value
-	greenShape: Animated.Value
-	greenPosX: Animated.Value
-	greenPosY: Animated.Value
-	greenRot: Animated.Value
-	greyShape: Animated.Value
-	greyPosX: Animated.Value
-	greyPosY: Animated.Value
-	greyRot: Animated.Value
-	rotateData: (
-		value: Animated.Value
-	) => Animated.AnimatedInterpolation<string | number>
-}) {
+
+// ANIMATIONS
+import {
+	brownAnimatePosX,
+	brownAnimatePosY,
+	brownAnimateRot,
+	greenAnimatePosX,
+	greenAnimatePosY,
+	greenAnimateRot,
+	greyAnimatePosX,
+	greyAnimatePosY,
+	greyAnimateRot,
+} from "../animations"
+
+// IMAGES
+import brownShape from "../images/brownShape.png"
+import greenShape from "../images/greenShape.png"
+import greyShape from "../images/greyShape.png"
+
+function MemoizedShapes() {
+	const brownPosX = useRef(new Animated.Value(0)).current
+	const brownPosY = useRef(new Animated.Value(0)).current
+	const brownRot = useRef(new Animated.Value(0.8)).current
+
+	const greenPosX = useRef(new Animated.Value(0)).current
+	const greenPosY = useRef(new Animated.Value(0)).current
+	const greenRot = useRef(new Animated.Value(0.3)).current
+
+	const greyPosX = useRef(new Animated.Value(0)).current
+	const greyPosY = useRef(new Animated.Value(0)).current
+	const greyRot = useRef(new Animated.Value(0.5)).current
+
+	const rotateData = (shapeRotate: Animated.Value) =>
+		shapeRotate.interpolate({
+			inputRange: [0, 1],
+			outputRange: ["0deg", "360deg"],
+		})
+
+	const animateShapes = () =>
+		Animated.parallel([
+			brownAnimatePosX(brownPosX),
+			brownAnimatePosY(brownPosY),
+			brownAnimateRot(brownRot, 0.8),
+			greenAnimatePosX(greenPosX),
+			greenAnimatePosY(greenPosY),
+			greenAnimateRot(greenRot, 0.3),
+			greyAnimatePosX(greyPosX),
+			greyAnimatePosY(greyPosY),
+			greyAnimateRot(greyRot, 0.5),
+		]).start()
+
 	useEffect(() => {
-		console.log("rendered")
+		animateShapes()
 	}, [])
+
 	return (
 		<Animated.View>
 			<Animated.Image
