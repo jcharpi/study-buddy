@@ -21,10 +21,13 @@ export const taskSlice = createSlice({
 		addTask: (state, action: PayloadAction<Task>) => {
 			state.value = [...state.value, action.payload]
 		},
+    setTasks: (state, action: PayloadAction<Task[]>) => {
+      state.value = JSON.parse(JSON.stringify(action.payload))
+    }
 	},
 })
 
-export const { addTask } = taskSlice.actions
+export const { addTask, setTasks } = taskSlice.actions
 
 export const selectTasks = (state: RootState) => state.taskSlice.value
 

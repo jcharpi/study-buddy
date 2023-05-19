@@ -1,45 +1,37 @@
 import EStyleSheet from "react-native-extended-stylesheet"
 
 export default EStyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  task: {
-    flex: 1, 
-    flexDirection: "row", 
-    justifyContent: "center",
-    maxHeight: 200
-  },
-  enterTaskTitle: {
-    marginTop: '3rem',
-    marginLeft: '1rem',
-    marginBottom: '1rem',
-    fontWeight: '600'
-  },
-  enterTaskInput: {
-    fontSize: 20,
-    marginHorizontal: "10%",
-  },
-  enterTaskLimitInput: {
-    marginTop: "-12.5%", 
-  },
-  enterTaskLimitInputOutline: {
-    borderTopLeftRadius: 0,
-		borderTopRightRadius: 0,
-  },
-  enterTaskLimitContainer: {
-    flexDirection: "row",
-    alignItems: "space-around",
-    alignContent:"center",
-    marginTop: "-11%"
-  },
-  enterTaskLayout: {
-    height: 200, 
-    width: "80%"
-  },
-  enterTaskOutline: {
-    borderRadius: 9,
-    borderWidth: 2,
-  },
+	container: {
+		flex: 1,
+		backgroundColor: "white",
+    marginTop: "1.75rem",
+	},
+	taskContainer: {
+    marginTop: "1rem",
+		maxHeight: 200,
+    width: 300,
+    alignSelf: "center"
+	},
+	task: {
+		borderRadius: 9,
+		borderWidth: 2,
+		marginVertical: 20,
+		padding: 10,
+		backgroundColor: "white",
+		height: 90,
+	},
+	enterTaskTitle: {
+		marginTop: "3rem",
+		marginLeft: "1rem",
+		marginBottom: "0.5rem",
+		fontWeight: "600",
+	},
+	enterTaskInput: {
+		fontSize: 20,
+		width: 300,
+	},
+	enterTaskOutline: {
+		borderRadius: 9,
+		borderWidth: 2,
+	},
 })
