@@ -25,7 +25,6 @@ EStyleSheet.build({
 })
 
 export default function App() {
-  AsyncStorage.clear()
   const theme = useTheme()
 	theme.colors.secondaryContainer = "transparent"
   theme.colors.background = "white"

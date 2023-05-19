@@ -1,17 +1,23 @@
 // REACT & EXPO
-import { useEffect, useRef, useState } from "react"
-import { Keyboard, Pressable, View } from "react-native"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { Animated, Dimensions, Keyboard, Pressable, View } from "react-native"
 import { IconButton, Text, TextInput } from "react-native-paper"
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel"
-import ExpoStatusBar from "expo-status-bar/build/ExpoStatusBar"
 import * as Haptics from "expo-haptics"
-
 // REDUX
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 import { addTask, selectTasks, setTasks } from "../reducers/taskSlice"
 
 // STYLES
 import styles from "../styles"
+import brownShape from "../images/brownShape.png"
+import greenShape from "../images/greenShape.png"
+
+import {
+	brownAnimatePosX,
+	brownAnimatePosY,
+	brownAnimateRot,
+} from "../animations"
 
 interface Input {
 	inputMode: string
@@ -27,6 +33,34 @@ export default function TaskInputPage() {
 	const [timeLimit, setTimeLimit] = useState("")
 	const taskRef = useRef<ICarouselInstance>(null)
 	const inputRef = useRef<ICarouselInstance>(null)
+	
+  const brownPosX = useRef(new Animated.Value(0)).current
+	const brownPosY = useRef(new Animated.Value(0)).current
+	const brownRot = useRef(new Animated.Value(0.8)).current
+  
+  const greenPosX = useRef(new Animated.Value(0)).current
+	const greenPosY = useRef(new Animated.Value(0)).current
+	const greenRot = useRef(new Animated.Value(0.3)).current
+  
+	const RotateData = useCallback((shapeRotate: Animated.Value) => 
+    shapeRotate.interpolate({
+      inputRange: [0, 1],
+      outputRange: ["0deg", "360deg"],
+    }), [])
+
+	const brownAnimate = useCallback(() => {
+		Animated.loop(
+			Animated.parallel([
+				brownAnimatePosX(brownPosX),
+				brownAnimatePosY(brownPosY),
+				brownAnimateRot(brownRot),
+			])
+		).start()
+	}, [])
+
+	useEffect(() => {
+		brownAnimate()
+	}, [])
 
 	const input: Input[] = [
 		{
@@ -43,10 +77,10 @@ export default function TaskInputPage() {
 		},
 	]
 
-  function removeTaskByName(name: string) {
-    dispatch(setTasks(tasks.filter(task => task.taskName !== name)))
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
-  }
+	function removeTaskByName(name: string) {
+		dispatch(setTasks(tasks.filter((task) => task.taskName !== name)))
+		Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+	}
 
 	function inputHandler() {
 		if (
@@ -55,7 +89,9 @@ export default function TaskInputPage() {
 		) {
 			inputRef.current?.next({ animated: true })
 		} else {
-			dispatch(addTask({ taskName: taskName.trim(), timeLimit: parseInt(timeLimit) }))
+			dispatch(
+				addTask({ taskName: taskName.trim(), timeLimit: parseInt(timeLimit) })
+			)
 			setTaskName("")
 			setTimeLimit("")
 			inputRef.current?.prev({ animated: true })
@@ -64,9 +100,12 @@ export default function TaskInputPage() {
 		}
 	}
 
-  const renderTask = ({ item, index }: any) => {
+	const renderTask = ({ item, index }: any) => {
 		return (
-			<Pressable onLongPress={() => removeTaskByName(item.taskName)} style={styles.task}>
+			<Pressable
+				onLongPress={() => removeTaskByName(item.taskName)}
+				style={styles.task}
+			>
 				<Text style={{ fontSize: 25 }}>{item.taskName}</Text>
 				<Text style={{ fontSize: 15 }}>
 					{item.timeLimit} {item.timeLimit === 1 ? "minute" : "minutes"}
@@ -108,9 +147,27 @@ export default function TaskInputPage() {
 			})
 		}, 100)
 	}, [tasks])
-
 	return (
 		<View style={styles.container}>
+			<Animated.View>
+				<Animated.Image
+					source={brownShape}
+					resizeMode="cover"
+					style={{
+						position: "absolute",
+						left: -100,
+						top: 0,
+						height: 200,
+						width: 200,
+						transform: [
+							{ translateX: brownPosX },
+							{ translateY: brownPosY },
+							{ rotateZ: RotateData(brownRot) },
+						],
+					}}
+				/>
+			</Animated.View>
+
 			<Text variant="headlineLarge" style={styles.enterTaskTitle}>
 				Good Morning!
 			</Text>
@@ -118,7 +175,7 @@ export default function TaskInputPage() {
 			<View style={styles.taskContainer}>
 				<Carousel
 					loop
-          enabled={tasks.length > 1}
+					enabled={false}
 					ref={taskRef}
 					vertical={true}
 					autoPlay={tasks.length > 1}
@@ -148,7 +205,7 @@ export default function TaskInputPage() {
 				/>
 			</View>
 
-			<View style={{flexDirection:"row", alignSelf:"center", gap: 5}}>
+			<View style={{ flexDirection: "row", alignSelf: "center", gap: 5 }}>
 				<IconButton
 					icon="plus"
 					mode="contained"
