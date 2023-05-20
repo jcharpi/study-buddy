@@ -1,19 +1,57 @@
 // REACT
-import { ScrollView, View } from "react-native"
+import { Dimensions, ScrollView, View } from "react-native"
 import { Card, Text } from "react-native-paper"
 
 // REDUX
-import { Status, selectTasks } from "../reducers/taskSlice"
-import { useAppSelector } from "../app/hooks"
+import { Status, Task, selectTasks } from "../reducers/taskSlice"
+import { useAppDispatch, useAppSelector } from "../app/hooks"
 
 // STYLES
 import styles from "../styles"
+import { useEffect } from "react"
+import { selectTotalProgress, setTotalProgress } from "../reducers/totalProgressSlice"
 
 export default function TaskOverviewPage() {
+	const SCREEN_HEIGHT_PERCENT_BREAKDOWN = Dimensions.get("screen").height / 100
+	const HEIGHT_SCALE_FACTOR = 1.5
+
+  const dispatch = useAppDispatch()
+  const totalProgress = useAppSelector(selectTotalProgress)
 	const tasks = useAppSelector(selectTasks).tasks
 	const statusTypes = Object.values(Status)
 
-	const HEIGHT_SCALE_FACTOR = 1.5
+	const testTasks: Task[] = [
+		{
+			taskName: "task1",
+			timeLimit: 20,
+			status: Status.INCOMPLETE,
+			progress: 100,
+		},
+		{
+			taskName: "task2",
+			timeLimit: 45,
+			status: Status.INCOMPLETE,
+			progress: 100,
+		},
+		{
+			taskName: "task3",
+			timeLimit: 10,
+			status: Status.INCOMPLETE,
+			progress: 100,
+		},
+	]
+
+	const getTotalProgress = (tasks: Task[]) => {
+		const totalPossible = tasks.length * 100
+		const current = tasks.reduce((sum, task) => sum + task.progress, 0)
+    const percent = current/totalPossible * 100
+    return percent
+	}
+
+  useEffect(() => {
+    dispatch(setTotalProgress(getTotalProgress(testTasks)))
+  }, [testTasks])
+
 	return (
 		<View style={styles.container}>
 			<Text variant="headlineLarge" style={styles.title}>
@@ -33,7 +71,7 @@ export default function TaskOverviewPage() {
 							style={styles.overviewScroll}
 							horizontal={true}
 						>
-							{tasks
+							{testTasks
 								.filter((task) => task.status === status)
 								.map((task) => (
 									<Card
@@ -59,6 +97,12 @@ export default function TaskOverviewPage() {
 					</View>
 				)
 			})}
+			<View
+				style={[
+					styles.totalProgressOverlay,
+					{ height: SCREEN_HEIGHT_PERCENT_BREAKDOWN * totalProgress },
+				]}
+			/>
 		</View>
 	)
 }

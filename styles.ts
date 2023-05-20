@@ -102,10 +102,16 @@ export default EStyleSheet.create({
 		position: "relative",
 	},
 	progressOverlay: {
-		backgroundColor: "#A0AE93",
+		backgroundColor: "#ABBEA5",
 		bottom: 0,
-		height: 175,
 		position: "absolute",
 		width: CARD_WIDTH,
+	},
+  totalProgressOverlay: {
+		backgroundColor: "#D4DFCA",
+		bottom: 0,
+		position: "absolute",
+		width: SCREEN_WIDTH,
+    zIndex: -1
 	},
 })

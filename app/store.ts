@@ -1,5 +1,7 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
+
 import taskSlice from "../reducers/taskSlice"
+import totalProgressSlice from "../reducers/totalProgressSlice"
 
 import { combineReducers } from "@reduxjs/toolkit"
 
@@ -17,6 +19,7 @@ import {
 
 const rootReducer = combineReducers({
 	taskSlice: taskSlice,
+	totalProgressSlice: totalProgressSlice,
 })
 
 const persistConfig = {
