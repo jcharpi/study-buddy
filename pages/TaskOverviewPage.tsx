@@ -17,25 +17,28 @@ export default function TaskOverviewPage() {
 
   const dispatch = useAppDispatch()
   const totalProgress = useAppSelector(selectTotalProgress)
-	const tasks = useAppSelector(selectTasks).tasks
+	const tasks = useAppSelector(selectTasks)
 	const statusTypes = Object.values(Status)
 
 	const testTasks: Task[] = [
 		{
 			taskName: "task1",
 			timeLimit: 20,
+      timeElapsed: 0,
 			status: Status.INCOMPLETE,
 			progress: 100,
 		},
 		{
 			taskName: "task2",
 			timeLimit: 45,
+      timeElapsed: 0,
 			status: Status.INCOMPLETE,
 			progress: 100,
 		},
 		{
 			taskName: "task3",
 			timeLimit: 10,
+      timeElapsed: 0,
 			status: Status.INCOMPLETE,
 			progress: 100,
 		},

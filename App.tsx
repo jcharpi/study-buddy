@@ -13,6 +13,7 @@ import TaskOverviewPage from "./pages/TaskOverviewPage"
 // STYLES
 import EStyleSheet from "react-native-extended-stylesheet"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import TaskInputPage from "./pages/TaskInputPage"
 
 const height = Dimensions.get("screen").height
 
@@ -23,6 +24,7 @@ EStyleSheet.build({
 })
 
 export default function App() {
+  AsyncStorage.clear()
 	const theme = useTheme()
 	theme.colors.primary = "black"
 	theme.colors.secondaryContainer = "transparent"
@@ -31,8 +33,8 @@ export default function App() {
 	return (
 		<Provider store={store}>
 			<PersistGate loading={null} persistor={persistor}>
-				{/* <TaskInputPage/> */}
-				<TaskOverviewPage />
+				<TaskInputPage/>
+				{/* <TaskOverviewPage /> */}
 			</PersistGate>
 		</Provider>
 	)

@@ -66,7 +66,7 @@ export default EStyleSheet.create({
 	greyShapeStyle: {
 		position: "absolute",
 		left: SCREEN_WIDTH - 100,
-		top: SCREEN_WIDTH - 200,
+		top: SCREEN_HEIGHT - 200,
 		height: 200,
 		width: 200,
 	},

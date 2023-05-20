@@ -10,24 +10,17 @@ export enum Status {
 export interface Task {
 	taskName: string
 	timeLimit: number
+  timeElapsed: number
 	status: Status
 	progress: number
 }
 
 export interface TaskState {
-	value: {
-		tasks: Task[]
-		taskName: string
-		timeLimit: string
-	}
+	value: Task[]
 }
 
 const initialState: TaskState = {
-	value: {
-		tasks: [],
-		taskName: "",
-		timeLimit: "",
-	},
+	value: [],
 }
 
 export const taskSlice = createSlice({
@@ -35,21 +28,15 @@ export const taskSlice = createSlice({
 	initialState,
 	reducers: {
 		addTask: (state, action: PayloadAction<Task>) => {
-			state.value.tasks = [...state.value.tasks, action.payload]
+			state.value = [...state.value, action.payload]
 		},
 		setTasks: (state, action: PayloadAction<Task[]>) => {
-			state.value.tasks = JSON.parse(JSON.stringify(action.payload))
-		},
-		setTaskName: (state, action: PayloadAction<string>) => {
-			state.value.taskName = action.payload
-		},
-		setTimeLimit: (state, action: PayloadAction<string>) => {
-			state.value.timeLimit = action.payload
+			state.value = JSON.parse(JSON.stringify(action.payload))
 		},
 	},
 })
 
-export const { addTask, setTasks, setTaskName, setTimeLimit } =
+export const { addTask, setTasks } =
 	taskSlice.actions
 
 export const selectTasks = (state: RootState) => state.taskSlice.value

@@ -7,8 +7,9 @@ import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel"
 import styles from "../styles"
 
 // REDUX
-import { selectTasks, setTaskName, setTimeLimit } from "../reducers/taskSlice"
+import { selectTasks } from "../reducers/taskSlice"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
+import { selectAddTask, setTaskName, setTimeLimit } from "../reducers/addTaskSlice"
 
 interface Input {
 	inputMode: string
@@ -29,9 +30,9 @@ export function CarouselView({
 	renderInput: ({ item }: any) => JSX.Element
 }) {
 	const dispatch = useAppDispatch()
-	const tasks = useAppSelector(selectTasks).tasks
-	const taskName = useAppSelector(selectTasks).taskName
-	const timeLimit = useAppSelector(selectTasks).timeLimit
+	const tasks = useAppSelector(selectTasks)
+	const taskName = useAppSelector(selectAddTask).taskName
+	const timeLimit = useAppSelector(selectAddTask).timeLimit
 
 	const input: Input[] = [
 		{
@@ -43,7 +44,7 @@ export function CarouselView({
 		{
 			inputMode: "numeric",
 			placeholder: "Time limit in minutes",
-			state: timeLimit,
+			state: timeLimit.toString(),
 			setState: (value: string) => dispatch(setTimeLimit(value)),
 		},
 	]

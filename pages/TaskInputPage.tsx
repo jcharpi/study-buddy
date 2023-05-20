@@ -1,6 +1,6 @@
 // REACT & EXPO
 import { useRef } from "react"
-import { Keyboard, Pressable, View } from "react-native"
+import { Keyboard, Pressable } from "react-native"
 import { Text, TextInput } from "react-native-paper"
 import { ICarouselInstance } from "react-native-reanimated-carousel"
 import * as Haptics from "expo-haptics"
@@ -11,10 +11,9 @@ import {
   Status,
 	addTask,
 	selectTasks,
-	setTaskName,
 	setTasks,
-	setTimeLimit,
 } from "../reducers/taskSlice"
+import { selectAddTask, setTaskName, setTimeLimit } from "../reducers/addTaskSlice"
 
 // STYLES
 import styles from "../styles"
@@ -26,9 +25,8 @@ import { InputButtonView } from "./../components/InputButtonView"
 
 export default function TaskInputPage() {
 	const dispatch = useAppDispatch()
-	const tasks = useAppSelector(selectTasks).tasks
-	const taskName = useAppSelector(selectTasks).taskName
-	const timeLimit = useAppSelector(selectTasks).timeLimit
+	const tasks = useAppSelector(selectTasks)
+  const taskToAdd = useAppSelector(selectAddTask)
 
 	const taskRef = useRef<ICarouselInstance>(null)
 	const inputRef = useRef<ICarouselInstance>(null)
@@ -41,13 +39,13 @@ export default function TaskInputPage() {
 	function inputHandler() {
 		if (
 			inputRef.current?.getCurrentIndex() === 0 &&
-			(taskName === "" || timeLimit === "")
+			(taskToAdd.taskName === "" || taskToAdd.timeLimit === 0)
 		) {
 			inputRef.current?.next({ animated: true })
 		} else {
-			dispatch(addTask({ taskName: taskName.trim(), timeLimit: +timeLimit, status: Status.INCOMPLETE, progress: 0 }))
+			dispatch(addTask(taskToAdd))
 			dispatch(setTaskName(""))
-			dispatch(setTimeLimit(""))
+			dispatch(setTimeLimit("0"))
 			inputRef.current?.prev({ animated: true })
 			Keyboard.dismiss()
 			Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
@@ -76,7 +74,7 @@ export default function TaskInputPage() {
 				clearButtonMode="while-editing"
 				inputMode={item.inputMode}
 				caretHidden={item.inputMode === "numeric"}
-				returnKeyType={taskName !== "" && timeLimit !== "" ? "done" : "next"}
+				returnKeyType={taskToAdd.taskName !== "" && taskToAdd.timeLimit !== 0 ? "done" : "next"}
 				maxLength={20}
 				mode="outlined"
 				multiline={false}
@@ -86,7 +84,7 @@ export default function TaskInputPage() {
 				outlineStyle={[styles.enterTaskOutline]}
 				placeholder={item.placeholder}
 				style={[styles.enterTaskInput]}
-				value={item.state}
+				value={item.state === "0" ? "" : item.state}
 			/>
 		)
 	}

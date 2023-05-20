@@ -16,8 +16,10 @@ import {
 	PURGE,
 	REGISTER,
 } from "redux-persist"
+import addTaskSlice from "../reducers/addTaskSlice"
 
 const rootReducer = combineReducers({
+  addTaskSlice: addTaskSlice,
 	taskSlice: taskSlice,
 	totalProgressSlice: totalProgressSlice,
 })

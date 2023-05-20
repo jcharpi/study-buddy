@@ -6,6 +6,7 @@ import { IconButton } from "react-native-paper"
 // REDUX
 import { useAppSelector } from "../app/hooks"
 import { selectTasks } from "../reducers/taskSlice"
+import { selectAddTask } from "../reducers/addTaskSlice"
 
 // STYLES
 import styles from "../styles"
@@ -15,9 +16,9 @@ export function InputButtonView({
 }: {
 	inputHandler: () => void
 }) {
-	const tasks = useAppSelector(selectTasks).tasks
-	const taskName = useAppSelector(selectTasks).taskName
-	const timeLimit = useAppSelector(selectTasks).timeLimit
+	const tasks = useAppSelector(selectTasks)
+	const taskName = useAppSelector(selectAddTask).taskName
+	const timeLimit = useAppSelector(selectAddTask).timeLimit
 
 	return (
 		<View style={styles.buttonContainer}>
@@ -27,7 +28,7 @@ export function InputButtonView({
 				iconColor="white"
 				size={45}
 				containerColor="black"
-				disabled={taskName === "" || timeLimit === ""}
+				disabled={taskName === "" || timeLimit === 0}
 				onPress={inputHandler}
 				style={{
 					borderRadius: 9,
@@ -40,7 +41,7 @@ export function InputButtonView({
 				iconColor="white"
 				size={45}
 				containerColor="black"
-				disabled={tasks.length === 0 || taskName !== "" || timeLimit !== ""}
+				disabled={tasks.length === 0 || taskName !== "" || timeLimit !== 0}
 				onPress={() => {}}
 				style={{
 					borderRadius: 9,
