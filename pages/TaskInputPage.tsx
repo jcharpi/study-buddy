@@ -8,7 +8,7 @@ import * as Haptics from "expo-haptics"
 // REDUX
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 import {
-  Status,
+	Task,
 	addTask,
 	selectTasks,
 	setTasks,
@@ -20,7 +20,7 @@ import styles from "../styles"
 
 // PAGES
 import MemoizedShapes from "../components/MemoizedShapes"
-import { CarouselView } from "./../components/CarouselView"
+import { CarouselView, Input } from "./../components/CarouselView"
 import { InputButtonView } from "./../components/InputButtonView"
 
 export default function TaskInputPage() {
@@ -52,7 +52,7 @@ export default function TaskInputPage() {
 		}
 	}
 
-	const renderTask = ({ item }: any) => {
+	const renderTask = ({ item }: {item: Task}) => {
 		return (
 			<Pressable
 				onLongPress={() => removeTaskByName(item.taskName)}
@@ -66,12 +66,12 @@ export default function TaskInputPage() {
 		)
 	}
 
-	const renderInput = ({ item }: any) => {
+	const renderInput = ({ item }: {item: Input}) => {
 		return (
 			<TextInput
 				autoCapitalize="sentences"
+        autoCorrect={false}
 				autoComplete="off"
-				clearButtonMode="while-editing"
 				inputMode={item.inputMode}
 				caretHidden={item.inputMode === "numeric"}
 				returnKeyType={taskToAdd.taskName !== "" && taskToAdd.timeLimit !== 0 ? "done" : "next"}

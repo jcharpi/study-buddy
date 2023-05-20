@@ -1,6 +1,6 @@
 // REACT
 import React, { useEffect } from "react"
-import { View } from "react-native"
+import { InputModeOptions, View } from "react-native"
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel"
 
 // STYLES
@@ -11,8 +11,8 @@ import { selectTasks } from "../reducers/taskSlice"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 import { selectAddTask, setTaskName, setTimeLimit } from "../reducers/addTaskSlice"
 
-interface Input {
-	inputMode: string
+export interface Input {
+	inputMode: InputModeOptions | undefined
 	placeholder: string
 	state: string
 	setState: (value: string) => {}
@@ -31,20 +31,19 @@ export function CarouselView({
 }) {
 	const dispatch = useAppDispatch()
 	const tasks = useAppSelector(selectTasks)
-	const taskName = useAppSelector(selectAddTask).taskName
-	const timeLimit = useAppSelector(selectAddTask).timeLimit
+  const task = useAppSelector(selectAddTask)
 
 	const input: Input[] = [
 		{
 			inputMode: "text",
 			placeholder: "Enter task name",
-			state: taskName,
+			state: task.taskName,
 			setState: (value: string) => dispatch(setTaskName(value)),
 		},
 		{
 			inputMode: "numeric",
 			placeholder: "Time limit in minutes",
-			state: timeLimit.toString(),
+			state: task.timeLimit.toString(),
 			setState: (value: string) => dispatch(setTimeLimit(value)),
 		},
 	]

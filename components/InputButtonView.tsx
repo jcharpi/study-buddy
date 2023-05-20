@@ -17,8 +17,7 @@ export function InputButtonView({
 	inputHandler: () => void
 }) {
 	const tasks = useAppSelector(selectTasks)
-	const taskName = useAppSelector(selectAddTask).taskName
-	const timeLimit = useAppSelector(selectAddTask).timeLimit
+	const task = useAppSelector(selectAddTask)
 
 	return (
 		<View style={styles.buttonContainer}>
@@ -28,7 +27,7 @@ export function InputButtonView({
 				iconColor="white"
 				size={45}
 				containerColor="black"
-				disabled={taskName === "" || timeLimit === 0}
+				disabled={task.taskName === "" || task.timeLimit === 0}
 				onPress={inputHandler}
 				style={{
 					borderRadius: 9,
@@ -41,7 +40,7 @@ export function InputButtonView({
 				iconColor="white"
 				size={45}
 				containerColor="black"
-				disabled={tasks.length === 0 || taskName !== "" || timeLimit !== 0}
+				disabled={tasks.length === 0 || task.taskName !== "" || task.timeLimit !== 0}
 				onPress={() => {}}
 				style={{
 					borderRadius: 9,
