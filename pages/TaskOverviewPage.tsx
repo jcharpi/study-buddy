@@ -1,7 +1,6 @@
-import { TaskScrollview } from "./../components/TaskScrollview"
 // REACT
-import { Dimensions, ScrollView, View } from "react-native"
-import { Card, Text } from "react-native-paper"
+import { Dimensions, View } from "react-native"
+import { Text } from "react-native-paper"
 
 // REDUX
 import { Status, Task, selectTasks, setTasks } from "../reducers/taskSlice"
@@ -16,7 +15,7 @@ import {
 } from "../reducers/totalProgressSlice"
 
 // COMPONENTS
-import { TaskCard } from "./../components/TaskCard"
+import { TaskScrollview } from "./../components/TaskScrollview"
 
 export default function TaskOverviewPage() {
 	const SCREEN_HEIGHT_PERCENT_BREAKDOWN = Dimensions.get("screen").height / 100

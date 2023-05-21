@@ -7,13 +7,10 @@ import { persistor, store } from "./app/store"
 import { PersistGate } from "redux-persist/integration/react"
 import { Provider } from "react-redux"
 
-// PAGES
-import TaskOverviewPage from "./pages/TaskOverviewPage"
-
 // STYLES
 import EStyleSheet from "react-native-extended-stylesheet"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import TaskInputPage from "./pages/TaskInputPage"
+import StudyBuddyLayout from "./layouts/StudyBuddyLayout"
 
 const height = Dimensions.get("screen").height
 
@@ -32,8 +29,7 @@ export default function App() {
 	return (
 		<Provider store={store}>
 			<PersistGate loading={null} persistor={persistor}>
-				{/* <TaskInputPage/> */}
-				<TaskOverviewPage />
+				<StudyBuddyLayout/>
 			</PersistGate>
 		</Provider>
 	)

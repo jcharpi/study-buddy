@@ -1,11 +1,6 @@
+// REDUX
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
-
-import taskSlice from "../reducers/taskSlice"
-import totalProgressSlice from "../reducers/totalProgressSlice"
-
 import { combineReducers } from "@reduxjs/toolkit"
-
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
 	persistStore,
 	persistReducer,
@@ -16,12 +11,21 @@ import {
 	PURGE,
 	REGISTER,
 } from "redux-persist"
+
+// STORAGE
+import AsyncStorage from "@react-native-async-storage/async-storage"
+
+// SLICES
 import addTaskSlice from "../reducers/addTaskSlice"
+import taskSlice from "../reducers/taskSlice"
+import totalProgressSlice from "../reducers/totalProgressSlice"
+import navigationSlice from "../reducers/navigationSlice"
 
 const rootReducer = combineReducers({
   addTaskSlice: addTaskSlice,
 	taskSlice: taskSlice,
 	totalProgressSlice: totalProgressSlice,
+  navigationSlice: navigationSlice
 })
 
 const persistConfig = {

@@ -7,13 +7,12 @@ import * as Haptics from "expo-haptics"
 
 // REDUX
 import { useAppDispatch, useAppSelector } from "../app/hooks"
+import { Task, addTask, selectTasks, setTasks } from "../reducers/taskSlice"
 import {
-	Task,
-	addTask,
-	selectTasks,
-	setTasks,
-} from "../reducers/taskSlice"
-import { selectAddTask, setTaskName, setTimeLimit } from "../reducers/addTaskSlice"
+	selectAddTask,
+	setTaskName,
+	setTimeLimit,
+} from "../reducers/addTaskSlice"
 
 // STYLES
 import styles from "../styles"
@@ -23,10 +22,10 @@ import MemoizedShapes from "../components/MemoizedShapes"
 import { CarouselView, Input } from "./../components/CarouselView"
 import { InputButtonView } from "./../components/InputButtonView"
 
-export default function TaskInputPage() {
+export default function TaskInputPage({ navigation }: any) {
 	const dispatch = useAppDispatch()
 	const tasks = useAppSelector(selectTasks)
-  const taskToAdd = useAppSelector(selectAddTask)
+	const taskToAdd = useAppSelector(selectAddTask)
 
 	const taskRef = useRef<ICarouselInstance>(null)
 	const inputRef = useRef<ICarouselInstance>(null)
@@ -52,7 +51,7 @@ export default function TaskInputPage() {
 		}
 	}
 
-	const renderTask = ({ item }: {item: Task}) => {
+	const renderTask = ({ item }: { item: Task }) => {
 		return (
 			<Pressable
 				onLongPress={() => removeTaskByName(item.taskName)}
@@ -66,15 +65,19 @@ export default function TaskInputPage() {
 		)
 	}
 
-	const renderInput = ({ item }: {item: Input}) => {
+	const renderInput = ({ item }: { item: Input }) => {
 		return (
 			<TextInput
 				autoCapitalize="sentences"
-        autoCorrect={false}
+				autoCorrect={false}
 				autoComplete="off"
 				inputMode={item.inputMode}
 				caretHidden={item.inputMode === "numeric"}
-				returnKeyType={taskToAdd.taskName !== "" && taskToAdd.timeLimit !== 0 ? "done" : "next"}
+				returnKeyType={
+					taskToAdd.taskName !== "" && taskToAdd.timeLimit !== 0
+						? "done"
+						: "next"
+				}
 				maxLength={20}
 				mode="outlined"
 				multiline={false}
@@ -88,7 +91,6 @@ export default function TaskInputPage() {
 			/>
 		)
 	}
-
 	return (
 		<Pressable onPress={Keyboard.dismiss} style={styles.container}>
 			<MemoizedShapes />
@@ -104,7 +106,7 @@ export default function TaskInputPage() {
 				renderInput={renderInput}
 			/>
 
-			<InputButtonView inputHandler={inputHandler} />
+			<InputButtonView navigation={navigation} inputHandler={inputHandler} />
 		</Pressable>
 	)
 }
