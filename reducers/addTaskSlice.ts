@@ -12,7 +12,6 @@ const initialState: AddTaskState = {
 		timeLimit: 0,
 		timeElapsed: 0,
 		status: Status.INCOMPLETE,
-		progress: 0,
 	},
 }
 

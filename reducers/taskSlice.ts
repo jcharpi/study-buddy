@@ -12,7 +12,6 @@ export interface Task {
 	timeLimit: number
   timeElapsed: number
 	status: Status
-	progress: number
 }
 
 export interface TaskState {
@@ -20,7 +19,26 @@ export interface TaskState {
 }
 
 const initialState: TaskState = {
-	value: [],
+	value: [
+    {
+			taskName: "task1",
+			timeLimit: 20,
+			timeElapsed: 0,
+			status: Status.INCOMPLETE,
+		},
+		{
+			taskName: "task2",
+			timeLimit: 45,
+			timeElapsed: 30,
+			status: Status.INCOMPLETE,
+		},
+		{
+			taskName: "task3",
+			timeLimit: 10,
+			timeElapsed: 10,
+			status: Status.INCOMPLETE,
+		},
+  ],
 }
 
 export const taskSlice = createSlice({

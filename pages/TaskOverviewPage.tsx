@@ -1,59 +1,69 @@
+import { TaskScrollview } from "./../components/TaskScrollview"
 // REACT
 import { Dimensions, ScrollView, View } from "react-native"
 import { Card, Text } from "react-native-paper"
 
 // REDUX
-import { Status, Task, selectTasks } from "../reducers/taskSlice"
+import { Status, Task, selectTasks, setTasks } from "../reducers/taskSlice"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 
 // STYLES
 import styles from "../styles"
 import { useEffect } from "react"
-import { selectTotalProgress, setTotalProgress } from "../reducers/totalProgressSlice"
+import {
+	selectTotalProgress,
+	setTotalProgress,
+} from "../reducers/totalProgressSlice"
+
+// COMPONENTS
+import { TaskCard } from "./../components/TaskCard"
 
 export default function TaskOverviewPage() {
 	const SCREEN_HEIGHT_PERCENT_BREAKDOWN = Dimensions.get("screen").height / 100
-	const HEIGHT_SCALE_FACTOR = 1.5
 
-  const dispatch = useAppDispatch()
-  const totalProgress = useAppSelector(selectTotalProgress)
+	const dispatch = useAppDispatch()
+	const totalProgress = useAppSelector(selectTotalProgress)
 	const tasks = useAppSelector(selectTasks)
 	const statusTypes = Object.values(Status)
 
-	const testTasks: Task[] = [
-		{
-			taskName: "task1",
-			timeLimit: 20,
-      timeElapsed: 0,
-			status: Status.INCOMPLETE,
-			progress: 100,
-		},
-		{
-			taskName: "task2",
-			timeLimit: 45,
-      timeElapsed: 0,
-			status: Status.INCOMPLETE,
-			progress: 100,
-		},
-		{
-			taskName: "task3",
-			timeLimit: 10,
-      timeElapsed: 0,
-			status: Status.INCOMPLETE,
-			progress: 100,
-		},
-	]
-
-	const getTotalProgress = (tasks: Task[]) => {
-		const totalPossible = tasks.length * 100
-		const current = tasks.reduce((sum, task) => sum + task.progress, 0)
-    const percent = current/totalPossible * 100
-    return percent
+	function sortTasks(tasks: Task[]) {
+		const updatedTasks = tasks.map((task) => {
+			const taskProgress = getTaskProgress(task)
+			if (taskProgress > 0 && taskProgress < 100) {
+				return {
+					...task,
+					status: Status.IN_PROGRESS,
+				}
+			} else if (getTaskProgress(task) === 100) {
+				return {
+					...task,
+					status: Status.COMPLETE,
+				}
+			}
+			return task
+		})
+		dispatch(setTasks(updatedTasks))
 	}
 
-  useEffect(() => {
-    dispatch(setTotalProgress(getTotalProgress(testTasks)))
-  }, [testTasks])
+	function getTaskProgress(task: Task) {
+		const timeElapsed = task.timeElapsed
+		const timeLimit = task.timeLimit
+		return Math.round((timeElapsed / timeLimit) * 100)
+	}
+
+	function getTotalProgress(tasks: Task[]) {
+		const totalPossible = tasks.length * 100
+		const current = tasks.reduce((sum, task) => sum + getTaskProgress(task), 0)
+		return Math.round((current / totalPossible) * 100)
+	}
+
+	useEffect(() => {
+		dispatch(setTotalProgress(getTotalProgress(tasks)))
+	}, [tasks])
+
+	useEffect(() => {
+		sortTasks(tasks)
+	}, [])
 
 	return (
 		<View style={styles.container}>
@@ -67,36 +77,11 @@ export default function TaskOverviewPage() {
 						<Text variant="titleLarge" style={styles.label}>
 							{status}
 						</Text>
-						<ScrollView
-							contentContainerStyle={styles.overviewScrollContainer}
-							alwaysBounceHorizontal={false}
-							showsHorizontalScrollIndicator={false}
-							style={styles.overviewScroll}
-							horizontal={true}
-						>
-							{testTasks
-								.filter((task) => task.status === status)
-								.map((task) => (
-									<Card
-										key={`${task.taskName}_card`}
-										mode="contained"
-										style={styles.overviewCard}
-									>
-										<Card.Content style={styles.cardContent}>
-											<View style={styles.overviewCardText}>
-												<Text variant="titleLarge">{task.taskName}</Text>
-												<Text variant="titleMedium">{task.progress}%</Text>
-											</View>
-											<View
-												style={[
-													styles.progressOverlay,
-													{ height: task.progress * HEIGHT_SCALE_FACTOR },
-												]}
-											/>
-										</Card.Content>
-									</Card>
-								))}
-						</ScrollView>
+						<TaskScrollview
+							status={status}
+							tasks={tasks}
+							getTaskProgress={getTaskProgress}
+						/>
 					</View>
 				)
 			})}

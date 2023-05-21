@@ -32,8 +32,8 @@ export default function App() {
 	return (
 		<Provider store={store}>
 			<PersistGate loading={null} persistor={persistor}>
-				<TaskInputPage/>
-				{/* <TaskOverviewPage /> */}
+				{/* <TaskInputPage/> */}
+				<TaskOverviewPage />
 			</PersistGate>
 		</Provider>
 	)
