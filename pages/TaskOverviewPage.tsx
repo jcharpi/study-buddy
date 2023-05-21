@@ -66,9 +66,14 @@ export default function TaskOverviewPage({ navigation }: any) {
 
 	return (
 		<View style={styles.container}>
-			<Text variant="headlineLarge" style={styles.title}>
-				Tasks
-			</Text>
+			<View style={styles.overviewContainer}>
+				<Text variant="headlineLarge" style={styles.title}>
+					Tasks
+				</Text>
+				<Text variant="headlineLarge" style={styles.title}>
+					{`${totalProgress}%`}
+				</Text>
+			</View>
 
 			{statusTypes.map((status) => {
 				return (

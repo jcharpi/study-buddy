@@ -23,6 +23,11 @@ export default EStyleSheet.create({
 		marginLeft: "1rem",
 		marginBottom: "0.5rem",
 	},
+	overviewContainer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+    marginRight: "1rem"
+	},
 	label: {
 		fontWeight: "400",
 		marginTop: 20,
@@ -107,11 +112,11 @@ export default EStyleSheet.create({
 		position: "absolute",
 		width: CARD_WIDTH,
 	},
-  totalProgressOverlay: {
+	totalProgressOverlay: {
 		backgroundColor: "#D4DFCA",
 		bottom: 0,
 		position: "absolute",
 		width: SCREEN_WIDTH,
-    zIndex: -1
+		zIndex: -1,
 	},
 })

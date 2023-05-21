@@ -34,7 +34,7 @@ export default function TaskActivePage() {
 			<View
 				style={[
 					styles.totalProgressOverlay,
-					{ height: SCREEN_HEIGHT_PERCENT_BREAKDOWN * getTaskProgress(task) },
+					{ height: SCREEN_HEIGHT_PERCENT_BREAKDOWN * getTaskProgress(task), backgroundColor: "#ABBEA5" },
 				]}
 			/>
 		</View>
