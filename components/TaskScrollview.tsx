@@ -15,10 +15,12 @@ export function TaskScrollview({
 	status,
 	tasks,
 	getTaskProgress,
+  navigation,
 }: {
 	status: Status
 	tasks: Task[]
 	getTaskProgress: (task: Task) => number
+  navigation: any
 }) {
 	return (
 		<ScrollView
@@ -35,6 +37,7 @@ export function TaskScrollview({
 						key={`${task.taskName}_card`}
 						getTaskProgress={getTaskProgress}
 						task={task}
+            navigation={navigation}
 					/>
 				))}
 		</ScrollView>

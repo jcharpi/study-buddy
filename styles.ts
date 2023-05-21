@@ -7,7 +7,7 @@ export default EStyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "white",
-		marginTop: "1.75rem",
+		paddingTop: "1.75rem",
 	},
 	task: {
 		backgroundColor: "white",

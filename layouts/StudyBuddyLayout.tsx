@@ -12,6 +12,7 @@ import { selectNavigation, setInitialRouteName } from "../reducers/navigationSli
 // PAGES
 import TaskInputPage from "../pages/TaskInputPage"
 import TaskOverviewPage from "../pages/TaskOverviewPage"
+import TaskActivePage from "../pages/TaskActivePage"
 
 const Stack = createStackNavigator()
 
@@ -30,7 +31,6 @@ export default function StudyBuddyLayout() {
 				: dispatch(setInitialRouteName("TaskInputPage"))
 		}
 		getInitialRouteName()
-    console.log(initialRouteName)
 	}, [tasks])
 
 	if (!initialRouteName) {
@@ -42,11 +42,14 @@ export default function StudyBuddyLayout() {
 			<Stack.Navigator
 				initialRouteName={initialRouteName}
 				screenOptions={{
-					headerShown: true,
+          gestureEnabled: true,
+          keyboardHandlingEnabled: true,
+					headerShown: false,
 				}}
 			>
 				<Stack.Screen name="TaskInputPage" component={TaskInputPage} />
 				<Stack.Screen name="TaskOverviewPage" component={TaskOverviewPage} />
+        <Stack.Screen name="TaskActivePage" component={TaskActivePage} />
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

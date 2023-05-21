@@ -23,8 +23,8 @@ export const addTaskSlice = createSlice({
 			state.value.taskName = action.payload
 		},
 		setTimeLimit: (state, action: PayloadAction<string>) => {
-			state.value.timeLimit = parseInt(action.payload)
-		},
+			state.value.timeLimit = isNaN(parseInt(action.payload)) ?  0 : parseInt(action.payload)
+    },
 		setTimeElapsed: (state, action: PayloadAction<number>) => {
 			state.value.timeElapsed = action.payload
 		},

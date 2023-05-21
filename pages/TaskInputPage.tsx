@@ -91,6 +91,7 @@ export default function TaskInputPage({ navigation }: any) {
 			/>
 		)
 	}
+  
 	return (
 		<Pressable onPress={Keyboard.dismiss} style={styles.container}>
 			<MemoizedShapes />

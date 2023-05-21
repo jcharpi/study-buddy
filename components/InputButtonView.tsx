@@ -13,10 +13,10 @@ import styles from "../styles"
 
 export function InputButtonView({
 	inputHandler,
-  navigation
+	navigation,
 }: {
-	inputHandler: () => void,
-  navigation: any
+	inputHandler: () => void
+	navigation: any
 }) {
 	const tasks = useAppSelector(selectTasks)
 	const task = useAppSelector(selectAddTask)
@@ -29,7 +29,9 @@ export function InputButtonView({
 				iconColor="white"
 				size={45}
 				containerColor="black"
-				disabled={task.taskName === "" || task.timeLimit === 0}
+				disabled={
+					task.taskName === "" || task.timeLimit === 0 || isNaN(task.timeLimit)
+				}
 				onPress={inputHandler}
 				style={{
 					borderRadius: 9,
@@ -42,7 +44,9 @@ export function InputButtonView({
 				iconColor="white"
 				size={45}
 				containerColor="black"
-				disabled={tasks.length === 0 || task.taskName !== "" || task.timeLimit !== 0}
+				disabled={
+					tasks.length === 0 || task.taskName !== "" || task.timeLimit !== 0
+				}
 				onPress={() => navigation.navigate("TaskOverviewPage")}
 				style={{
 					borderRadius: 9,

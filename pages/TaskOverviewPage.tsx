@@ -17,7 +17,7 @@ import {
 // COMPONENTS
 import { TaskScrollview } from "./../components/TaskScrollview"
 
-export default function TaskOverviewPage() {
+export default function TaskOverviewPage({ navigation }: any) {
 	const SCREEN_HEIGHT_PERCENT_BREAKDOWN = Dimensions.get("screen").height / 100
 
 	const dispatch = useAppDispatch()
@@ -80,6 +80,7 @@ export default function TaskOverviewPage() {
 							status={status}
 							tasks={tasks}
 							getTaskProgress={getTaskProgress}
+							navigation={navigation}
 						/>
 					</View>
 				)
