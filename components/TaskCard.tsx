@@ -21,7 +21,7 @@ export function TaskCard({
 	const HEIGHT_SCALE_FACTOR = 1.5
 
 	return (
-		<Pressable onPress={() => navigation.navigate("TaskActivePage", { task })}>
+		<Pressable onPress={getTaskProgress(task) > 99 ? () => {} : () => navigation.navigate("TaskActivePage", { task }) }>
 			<Card mode="contained" style={styles.overviewCard}>
 				<Card.Content style={styles.cardContent}>
 					<View style={styles.overviewCardText}>

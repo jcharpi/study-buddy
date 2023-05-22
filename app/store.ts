@@ -20,10 +20,12 @@ import addTaskSlice from "../reducers/addTaskSlice"
 import taskSlice from "../reducers/taskSlice"
 import totalProgressSlice from "../reducers/totalProgressSlice"
 import navigationSlice from "../reducers/navigationSlice"
+import timerSlice from "../reducers/timerSlice"
 
 const rootReducer = combineReducers({
   addTaskSlice: addTaskSlice,
 	taskSlice: taskSlice,
+  timerSlice: timerSlice,
 	totalProgressSlice: totalProgressSlice,
   navigationSlice: navigationSlice
 })

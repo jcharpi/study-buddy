@@ -1,42 +1,132 @@
 // REACT
-import { Dimensions, View } from "react-native"
+import { Animated, Dimensions, Pressable, View } from "react-native"
 import { Text } from "react-native-paper"
 
 // REDUX
-import { Task } from "../reducers/taskSlice"
+import { Task, selectTasks, setTasks } from "../reducers/taskSlice"
 
 // STYLES
 import styles from "../styles"
 import { useRoute } from "@react-navigation/native"
+import Countdown from "react-countdown"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { useAppDispatch, useAppSelector } from "../app/hooks"
+import { selectTimer, setSecondsElapsed } from "../reducers/timerSlice"
 
 type TaskActivePageRouteParams = {
 	task: Task
 }
 
-export default function TaskActivePage() {
-  const SCREEN_HEIGHT_PERCENT_BREAKDOWN = Dimensions.get("screen").height / 100
+export default function TaskActivePage({ navigation }: any) {
+	const SCREEN_HEIGHT_PERCENT_BREAKDOWN = Dimensions.get("screen").height / 100
 
 	const route = useRoute()
 	const { task } = route.params as TaskActivePageRouteParams
 
-	function getTaskProgress(task: Task) {
-		const timeElapsed = task.timeElapsed
-		const timeLimit = task.timeLimit
-		return Math.round((timeElapsed / timeLimit) * 100)
+	const TIME = 60000 * (task.timeLimit - task.timeElapsed)
+	const height = useRef(new Animated.Value(0)).current
+
+	const dispatch = useAppDispatch()
+	const totalSecondsElapsed = useAppSelector(selectTimer)
+	const tasks = useAppSelector(selectTasks)
+
+	let secondsElapsedCount = 0
+	const secToMinElapsed = () => {
+		const minutes = Math.floor((totalSecondsElapsed + secondsElapsedCount) / 60) // Get the whole number of minutes
+		const remainingSeconds = (totalSecondsElapsed + secondsElapsedCount) % 60 // Get the remaining seconds
+
+		const decimalMinutes = minutes + remainingSeconds / 60 // Calculate the decimal minutes
+
+		return decimalMinutes
 	}
 
-	return (
-		<View style={styles.container}>
-			<Text variant="headlineLarge" style={styles.title}>
-				{task.taskName}
+	const renderer = ({
+		minutes,
+		seconds,
+	}: {
+		minutes: number
+		seconds: number
+	}) => {
+		return (
+			<Text variant="headlineMedium" style={styles.title}>
+				{minutes}:{seconds < 10 ? "0" + seconds : seconds}
 			</Text>
+		)
+	}
 
-			<View
+	const updateTaskTimeElapsed = () => {
+		const updatedTasks = tasks.map((taskCheck) => {
+			if (task === taskCheck) {
+				return {
+					...taskCheck,
+					timeElapsed: secToMinElapsed(),
+				}
+			}
+			return taskCheck
+		})
+		dispatch(setTasks(updatedTasks))
+	}
+
+	function handleExit() {
+    navigation.navigate("TaskOverviewPage")
+
+		setTimeout(() => {
+      updateTaskTimeElapsed()
+      dispatch(setSecondsElapsed(secondsElapsedCount))
+		}, 400)
+	}
+
+  function handleComplete() {
+    secondsElapsedCount++
+    handleExit()
+  }
+
+	function handleTick() {
+		secondsElapsedCount++
+		console.log(secondsElapsedCount)
+	}
+
+	const getTaskProgress = useCallback(
+		(task: Task) => {
+			const timeElapsed = task.timeElapsed
+			const timeLimit = task.timeLimit
+			const progress = Math.round((timeElapsed / timeLimit) * 99)
+			return SCREEN_HEIGHT_PERCENT_BREAKDOWN * progress
+		},
+		[tasks]
+	)
+
+	useEffect(() => {
+		Animated.timing(height, {
+			toValue: Dimensions.get("screen").height - getTaskProgress(task),
+			duration: TIME,
+			useNativeDriver: false,
+		}).start()
+	}, [])
+
+	return (
+		<Pressable style={styles.container} onPress={handleExit}>
+			<View style={styles.overviewContainer}>
+				<Text variant="headlineLarge" style={styles.title}>
+					{task.taskName}
+				</Text>
+				<Countdown
+					overtime={false}
+					onTick={handleTick}
+					onComplete={handleComplete}
+					date={Date.now() + TIME}
+					renderer={renderer}
+				/>
+			</View>
+			<Animated.View
 				style={[
 					styles.totalProgressOverlay,
-					{ height: SCREEN_HEIGHT_PERCENT_BREAKDOWN * getTaskProgress(task), backgroundColor: "#ABBEA5" },
+					{
+						height: Animated.add(getTaskProgress(task), height),
+						backgroundColor: "#ABBEA5",
+					},
 				]}
 			/>
-		</View>
+		</Pressable>
 	)
 }

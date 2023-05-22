@@ -33,7 +33,7 @@ export default function TaskOverviewPage({ navigation }: any) {
 					...task,
 					status: Status.IN_PROGRESS,
 				}
-			} else if (getTaskProgress(task) === 100) {
+			} else if (getTaskProgress(task) > 99) {
 				return {
 					...task,
 					status: Status.COMPLETE,
@@ -41,7 +41,9 @@ export default function TaskOverviewPage({ navigation }: any) {
 			}
 			return task
 		})
-		dispatch(setTasks(updatedTasks))
+		if (JSON.stringify(updatedTasks) !== JSON.stringify(tasks)) {
+			dispatch(setTasks(updatedTasks))
+		}
 	}
 
 	function getTaskProgress(task: Task) {
@@ -62,7 +64,7 @@ export default function TaskOverviewPage({ navigation }: any) {
 
 	useEffect(() => {
 		sortTasks(tasks)
-	}, [])
+	}, [tasks])
 
 	return (
 		<View style={styles.container}>
