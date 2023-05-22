@@ -9,9 +9,8 @@ import { Task, selectTasks, setTasks } from "../reducers/taskSlice"
 import styles from "../styles"
 import { useRoute } from "@react-navigation/native"
 import Countdown from "react-countdown"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
-import { selectTimer, setSecondsElapsed } from "../reducers/timerSlice"
 
 type TaskActivePageRouteParams = {
 	task: Task
@@ -27,17 +26,16 @@ export default function TaskActivePage({ navigation }: any) {
 	const height = useRef(new Animated.Value(0)).current
 
 	const dispatch = useAppDispatch()
-	const totalSecondsElapsed = useAppSelector(selectTimer)
 	const tasks = useAppSelector(selectTasks)
 
 	let secondsElapsedCount = 0
 	const secToMinElapsed = () => {
-		const minutes = Math.floor((totalSecondsElapsed + secondsElapsedCount) / 60) // Get the whole number of minutes
-		const remainingSeconds = (totalSecondsElapsed + secondsElapsedCount) % 60 // Get the remaining seconds
+		const minutes = Math.floor((secondsElapsedCount) / 60) // Get the whole number of minutes
+		const remainingSeconds = (secondsElapsedCount) % 60 // Get the remaining seconds
 
 		const decimalMinutes = minutes + remainingSeconds / 60 // Calculate the decimal minutes
 
-		return decimalMinutes
+		return decimalMinutes + task.timeElapsed
 	}
 
 	const renderer = ({
@@ -72,7 +70,6 @@ export default function TaskActivePage({ navigation }: any) {
 
 		setTimeout(() => {
       updateTaskTimeElapsed()
-      dispatch(setSecondsElapsed(secondsElapsedCount))
 		}, 400)
 	}
 
