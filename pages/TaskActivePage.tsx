@@ -86,7 +86,7 @@ export default function TaskActivePage({ navigation }: any) {
 		(task: Task) => {
 			const timeElapsed = task.timeElapsed
 			const timeLimit = task.timeLimit
-			const progress = Math.round((timeElapsed / timeLimit) * 99)
+			const progress = Math.round((timeElapsed / timeLimit) * 100)
 			return SCREEN_HEIGHT_PERCENT_BREAKDOWN * progress
 		},
 		[tasks]

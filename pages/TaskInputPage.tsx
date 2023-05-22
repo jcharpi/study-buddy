@@ -9,9 +9,9 @@ import * as Haptics from "expo-haptics"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 import { Task, addTask, selectTasks, setTasks } from "../reducers/taskSlice"
 import {
+  resetTimeLimit,
 	selectAddTask,
 	setTaskName,
-	setTimeLimit,
 } from "../reducers/addTaskSlice"
 
 // STYLES
@@ -44,7 +44,7 @@ export default function TaskInputPage({ navigation }: any) {
 		} else {
 			dispatch(addTask(taskToAdd))
 			dispatch(setTaskName(""))
-			dispatch(setTimeLimit("0"))
+			dispatch(resetTimeLimit())
 			inputRef.current?.prev({ animated: true })
 			Keyboard.dismiss()
 			Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
@@ -81,7 +81,7 @@ export default function TaskInputPage({ navigation }: any) {
 				maxLength={20}
 				mode="outlined"
 				multiline={false}
-				onChangeText={(state) => item.setState(state)}
+				onChangeText={item.setState}
 				onSubmitEditing={inputHandler}
 				outlineColor="black"
 				outlineStyle={[styles.enterTaskOutline]}

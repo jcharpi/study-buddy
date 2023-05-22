@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks"
 
 // STYLES
 import styles from "../styles"
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import {
 	selectTotalProgress,
 	setTotalProgress,
@@ -25,26 +25,26 @@ export default function TaskOverviewPage({ navigation }: any) {
 	const tasks = useAppSelector(selectTasks)
 	const statusTypes = Object.values(Status)
 
-	function sortTasks(tasks: Task[]) {
-		const updatedTasks = tasks.map((task) => {
-			const taskProgress = getTaskProgress(task)
-			if (taskProgress > 0 && taskProgress < 100) {
-				return {
-					...task,
-					status: Status.IN_PROGRESS,
-				}
-			} else if (getTaskProgress(task) > 99) {
-				return {
-					...task,
-					status: Status.COMPLETE,
-				}
-			}
-			return task
-		})
-		if (JSON.stringify(updatedTasks) !== JSON.stringify(tasks)) {
-			dispatch(setTasks(updatedTasks))
-		}
-	}
+	const sortTasks = useCallback((tasks: Task[]) => {
+    const updatedTasks = tasks.map((task) => {
+      const taskProgress = getTaskProgress(task)
+      if (taskProgress > 0 && taskProgress < 100) {
+        return {
+          ...task,
+          status: Status.IN_PROGRESS,
+        }
+      } else if (getTaskProgress(task) > 99) {
+        return {
+          ...task,
+          status: Status.COMPLETE,
+        }
+      }
+      return task
+    })
+    if (JSON.stringify(updatedTasks) !== JSON.stringify(tasks)) {
+      dispatch(setTasks(updatedTasks))
+    }
+  }, [getTaskProgress])
 
 	function getTaskProgress(task: Task) {
 		const timeElapsed = task.timeElapsed
