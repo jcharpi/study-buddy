@@ -80,7 +80,6 @@ export default function TaskActivePage({ navigation }: any) {
 
 	function handleTick() {
 		secondsElapsedCount++
-		console.log(secondsElapsedCount)
 	}
 
 	const getTaskProgress = useCallback(
