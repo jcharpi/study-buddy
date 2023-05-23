@@ -3,13 +3,20 @@ import { Dimensions, View } from "react-native"
 import { Text } from "react-native-paper"
 
 // REDUX
-import { Status, Task, resetTasks, selectTasks, setTasks } from "../reducers/taskSlice"
+import {
+	Status,
+	Task,
+	resetTasks,
+	selectTasks,
+	setTasks,
+} from "../reducers/taskSlice"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 
 // STYLES
 import styles from "../styles"
 import { useCallback, useEffect } from "react"
 import {
+	resetTotalProgress,
 	selectTotalProgress,
 	setTotalProgress,
 } from "../reducers/totalProgressSlice"
@@ -46,7 +53,7 @@ export default function TaskOverviewPage({ navigation }: any) {
 				dispatch(setTasks(updatedTasks))
 			}
 		},
-		[getTaskProgress]
+		[getTaskProgress, tasks]
 	)
 
 	function getTaskProgress(task: Task) {
@@ -62,29 +69,30 @@ export default function TaskOverviewPage({ navigation }: any) {
 	}
 
 	useEffect(() => {
-		dispatch(setTotalProgress(getTotalProgress(tasks)))
-		sortTasks(tasks)
+		if (tasks.length > 0) {
+			dispatch(setTotalProgress(getTotalProgress(tasks)))
+			sortTasks(tasks)
+		}
 	}, [tasks])
 
 	useEffect(() => {
-		// Clear stack and set initial route name at midnight
-		// const now = new Date()
-		// const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0)
-		// const millisecondsUntilMidnight: number = midnight.getTime() - now.getTime()
+		//Clear stack and set initial route name at midnight
+		const now = new Date()
+		const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0)
+		const millisecondsUntilMidnight: number = midnight.getTime() - now.getTime()
 
-		// const timeoutId = setTimeout(() => {
-		//   // Clear stack
-		//   dispatch(setInitialRouteName("TaskInputPage"))
-		// }, millisecondsUntilMidnight)
 		setTimeout(() => {
-			navigation.reset({
+		  // Clear stack
+		  navigation.reset({
 				index: 0,
 				routes: [{ name: "TaskInputPage" }],
 			})
-		}, 10000)
+			dispatch(resetTotalProgress())
+			dispatch(resetTasks())
+		}, millisecondsUntilMidnight)
 	}, [])
 
-	return (
+  return (
 		<View style={styles.container}>
 			<View style={styles.overviewContainer}>
 				<Text variant="headlineLarge" style={styles.title}>
@@ -129,7 +137,12 @@ export default function TaskOverviewPage({ navigation }: any) {
 			<View
 				style={[
 					styles.totalProgressOverlay,
-					{ height: SCREEN_HEIGHT_PERCENT_BREAKDOWN * totalProgress },
+					{
+						height:
+							tasks.length > 0
+								? SCREEN_HEIGHT_PERCENT_BREAKDOWN * totalProgress
+								: 0,
+					},
 				]}
 			/>
 		</View>
