@@ -29,6 +29,7 @@ export default function TaskActivePage({ navigation }: any) {
 	const tasks = useAppSelector(selectTasks)
 
 	let secondsElapsedCount = 0
+
 	const secToMinElapsed = () => {
 		const minutes = Math.floor((secondsElapsedCount) / 60) // Get the whole number of minutes
 		const remainingSeconds = (secondsElapsedCount) % 60 // Get the remaining seconds

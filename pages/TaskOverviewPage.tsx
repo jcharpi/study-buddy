@@ -25,26 +25,29 @@ export default function TaskOverviewPage({ navigation }: any) {
 	const tasks = useAppSelector(selectTasks)
 	const statusTypes = Object.values(Status)
 
-	const sortTasks = useCallback((tasks: Task[]) => {
-    const updatedTasks = tasks.map((task) => {
-      const taskProgress = getTaskProgress(task)
-      if (taskProgress > 0 && taskProgress < 100) {
-        return {
-          ...task,
-          status: Status.IN_PROGRESS,
-        }
-      } else if (getTaskProgress(task) > 99) {
-        return {
-          ...task,
-          status: Status.COMPLETE,
-        }
-      }
-      return task
-    })
-    if (JSON.stringify(updatedTasks) !== JSON.stringify(tasks)) {
-      dispatch(setTasks(updatedTasks))
-    }
-  }, [getTaskProgress])
+	const sortTasks = useCallback(
+		(tasks: Task[]) => {
+			const updatedTasks = tasks.map((task) => {
+				const taskProgress = getTaskProgress(task)
+				if (taskProgress > 0 && taskProgress < 100) {
+					return {
+						...task,
+						status: Status.IN_PROGRESS,
+					}
+				} else if (getTaskProgress(task) > 99) {
+					return {
+						...task,
+						status: Status.COMPLETE,
+					}
+				}
+				return task
+			})
+			if (JSON.stringify(updatedTasks) !== JSON.stringify(tasks)) {
+				dispatch(setTasks(updatedTasks))
+			}
+		},
+		[getTaskProgress]
+	)
 
 	function getTaskProgress(task: Task) {
 		const timeElapsed = task.timeElapsed
@@ -70,28 +73,42 @@ export default function TaskOverviewPage({ navigation }: any) {
 		<View style={styles.container}>
 			<View style={styles.overviewContainer}>
 				<Text variant="headlineLarge" style={styles.title}>
-					Tasks
+					{totalProgress === 100 ? "Tasks complete! 🥳️" : "Tasks"}
 				</Text>
 				<Text variant="headlineLarge" style={styles.title}>
-					{`${totalProgress}%`}
+					{totalProgress === 100 ? '' : `${totalProgress}%`}
 				</Text>
 			</View>
-
-			{statusTypes.map((status) => {
-				return (
-					<View key={`${status}_header`}>
-						<Text variant="titleLarge" style={styles.label}>
-							{status}
-						</Text>
-						<TaskScrollview
-							status={status}
-							tasks={tasks}
-							getTaskProgress={getTaskProgress}
-							navigation={navigation}
-						/>
-					</View>
-				)
-			})}
+			{totalProgress === 100 ? (
+				<View key={`${Status.COMPLETE}_header`}>
+          <Text variant="titleLarge" style={styles.label}>Check back tomorrow morning!</Text>
+					<Text variant="titleLarge" style={styles.label}>
+						{Status.COMPLETE}
+					</Text>
+					<TaskScrollview
+						status={Status.COMPLETE}
+						tasks={tasks}
+						getTaskProgress={getTaskProgress}
+						navigation={navigation}
+					/>
+				</View>
+			) : (
+				statusTypes.map((status) => {
+					return (
+						<View key={`${status}_header`}>
+							<Text variant="titleLarge" style={styles.label}>
+								{status}
+							</Text>
+							<TaskScrollview
+								status={status}
+								tasks={tasks}
+								getTaskProgress={getTaskProgress}
+								navigation={navigation}
+							/>
+						</View>
+					)
+				})
+			)}
 			<View
 				style={[
 					styles.totalProgressOverlay,
