@@ -3,7 +3,7 @@ import { Dimensions, View } from "react-native"
 import { Text } from "react-native-paper"
 
 // REDUX
-import { Status, Task, selectTasks, setTasks } from "../reducers/taskSlice"
+import { Status, Task, resetTasks, selectTasks, setTasks } from "../reducers/taskSlice"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 
 // STYLES
@@ -63,11 +63,26 @@ export default function TaskOverviewPage({ navigation }: any) {
 
 	useEffect(() => {
 		dispatch(setTotalProgress(getTotalProgress(tasks)))
+		sortTasks(tasks)
 	}, [tasks])
 
 	useEffect(() => {
-		sortTasks(tasks)
-	}, [tasks])
+		// Clear stack and set initial route name at midnight
+		// const now = new Date()
+		// const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0)
+		// const millisecondsUntilMidnight: number = midnight.getTime() - now.getTime()
+
+		// const timeoutId = setTimeout(() => {
+		//   // Clear stack
+		//   dispatch(setInitialRouteName("TaskInputPage"))
+		// }, millisecondsUntilMidnight)
+		setTimeout(() => {
+			navigation.reset({
+				index: 0,
+				routes: [{ name: "TaskInputPage" }],
+			})
+		}, 10000)
+	}, [])
 
 	return (
 		<View style={styles.container}>
@@ -76,12 +91,14 @@ export default function TaskOverviewPage({ navigation }: any) {
 					{totalProgress === 100 ? "Tasks complete! 🥳️" : "Tasks"}
 				</Text>
 				<Text variant="headlineLarge" style={styles.title}>
-					{totalProgress === 100 ? '' : `${totalProgress}%`}
+					{totalProgress === 100 ? "" : `${totalProgress}%`}
 				</Text>
 			</View>
 			{totalProgress === 100 ? (
 				<View key={`${Status.COMPLETE}_header`}>
-          <Text variant="titleLarge" style={styles.label}>Check back tomorrow morning!</Text>
+					<Text variant="titleLarge" style={styles.label}>
+						Check back tomorrow morning!
+					</Text>
 					<Text variant="titleLarge" style={styles.label}>
 						{Status.COMPLETE}
 					</Text>

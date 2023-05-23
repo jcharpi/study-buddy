@@ -32,10 +32,13 @@ export const taskSlice = createSlice({
 		setTasks: (state, action: PayloadAction<Task[]>) => {
 			state.value = JSON.parse(JSON.stringify(action.payload))
 		},
+    resetTasks: (state) => {
+			state.value = JSON.parse(JSON.stringify([]))
+		},
 	},
 })
 
-export const { addTask, setTasks } =
+export const { addTask, setTasks, resetTasks } =
 	taskSlice.actions
 
 export const selectTasks = (state: RootState) => state.taskSlice.value

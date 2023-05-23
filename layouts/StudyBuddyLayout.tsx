@@ -30,7 +30,7 @@ export default function StudyBuddyLayout() {
 				? dispatch(setInitialRouteName("TaskOverviewPage"))
 				: dispatch(setInitialRouteName("TaskInputPage"))
 		}
-		getInitialRouteName()
+    getInitialRouteName()
 	}, [tasks])
 
 	if (!initialRouteName) {
@@ -42,7 +42,7 @@ export default function StudyBuddyLayout() {
 			<Stack.Navigator
 				initialRouteName={initialRouteName}
 				screenOptions={{
-          gestureEnabled: true,
+          gestureEnabled: false,
           keyboardHandlingEnabled: true,
 					headerShown: false,
 				}}

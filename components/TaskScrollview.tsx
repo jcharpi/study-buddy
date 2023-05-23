@@ -32,9 +32,9 @@ export function TaskScrollview({
 		>
 			{tasks
 				.filter((task) => task.status === status)
-				.map((task) => (
+				.map((task, index) => (
 					<TaskCard
-						key={`${task.taskName}_card`}
+						key={`${task.taskName}_${index}}_card`}
 						getTaskProgress={getTaskProgress}
 						task={task}
             navigation={navigation}
