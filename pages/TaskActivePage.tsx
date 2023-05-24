@@ -31,8 +31,8 @@ export default function TaskActivePage({ navigation }: any) {
 	let secondsElapsedCount = 0
 
 	const secToMinElapsed = () => {
-		const minutes = Math.floor((secondsElapsedCount) / 60) // Get the whole number of minutes
-		const remainingSeconds = (secondsElapsedCount) % 60 // Get the remaining seconds
+		const minutes = Math.floor(secondsElapsedCount / 60) // Get the whole number of minutes
+		const remainingSeconds = secondsElapsedCount % 60 // Get the remaining seconds
 
 		const decimalMinutes = minutes + remainingSeconds / 60 // Calculate the decimal minutes
 
@@ -40,15 +40,19 @@ export default function TaskActivePage({ navigation }: any) {
 	}
 
 	const renderer = ({
+		hours,
 		minutes,
 		seconds,
 	}: {
+		hours: number
 		minutes: number
 		seconds: number
 	}) => {
 		return (
 			<Text variant="headlineMedium" style={styles.title}>
-				{minutes}:{seconds < 10 ? "0" + seconds : seconds}
+				{hours > 0 ? hours + ":" : ""}
+				{minutes < 10 && hours > 0 ? "0" + minutes : minutes}:
+				{seconds < 10 ? "0" + seconds : seconds}
 			</Text>
 		)
 	}
@@ -67,17 +71,17 @@ export default function TaskActivePage({ navigation }: any) {
 	}
 
 	function handleExit() {
-    navigation.navigate("TaskOverviewPage")
+		navigation.navigate("TaskOverviewPage")
 
 		setTimeout(() => {
-      updateTaskTimeElapsed()
+			updateTaskTimeElapsed()
 		}, 400)
 	}
 
-  function handleComplete() {
-    secondsElapsedCount++
-    handleExit()
-  }
+	function handleComplete() {
+		secondsElapsedCount++
+		handleExit()
+	}
 
 	function handleTick() {
 		secondsElapsedCount++

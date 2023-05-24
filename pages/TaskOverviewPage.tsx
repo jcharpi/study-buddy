@@ -59,7 +59,7 @@ export default function TaskOverviewPage({ navigation }: any) {
 	function getTaskProgress(task: Task) {
 		const timeElapsed = task.timeElapsed
 		const timeLimit = task.timeLimit
-		return Math.round((timeElapsed / timeLimit) * 100)
+		return Math.ceil((timeElapsed / timeLimit) * 100)
 	}
 
 	function getTotalProgress(tasks: Task[]) {
@@ -78,12 +78,19 @@ export default function TaskOverviewPage({ navigation }: any) {
 	useEffect(() => {
 		//Clear stack and set initial route name at midnight
 		const now = new Date()
-		const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0)
+		const midnight = new Date(
+			now.getFullYear(),
+			now.getMonth(),
+			now.getDate() + 1,
+			0,
+			0,
+			0
+		)
 		const millisecondsUntilMidnight: number = midnight.getTime() - now.getTime()
 
 		setTimeout(() => {
-		  // Clear stack
-		  navigation.reset({
+			// Clear stack
+			navigation.reset({
 				index: 0,
 				routes: [{ name: "TaskInputPage" }],
 			})
@@ -92,7 +99,7 @@ export default function TaskOverviewPage({ navigation }: any) {
 		}, millisecondsUntilMidnight)
 	}, [])
 
-  return (
+	return (
 		<View style={styles.container}>
 			<View style={styles.overviewContainer}>
 				<Text variant="headlineLarge" style={styles.title}>
