@@ -12,34 +12,34 @@ import { Status, Task } from "../reducers/taskSlice"
 import { TaskCard } from "./TaskCard"
 
 export function TaskScrollview({
-	status,
-	tasks,
-	getTaskProgress,
+  status,
+  tasks,
+  getTaskProgress,
   navigation,
 }: {
-	status: Status
-	tasks: Task[]
-	getTaskProgress: (task: Task) => number
+  status: Status
+  tasks: Task[]
+  getTaskProgress: (task: Task) => number
   navigation: any
 }) {
-	return (
-		<ScrollView
-			contentContainerStyle={styles.overviewScrollContainer}
-			alwaysBounceHorizontal={false}
-			showsHorizontalScrollIndicator={false}
-			style={styles.overviewScroll}
-			horizontal={true}
-		>
-			{tasks
-				.filter((task) => task.status === status)
-				.map((task, index) => (
-					<TaskCard
-						key={`${task.taskName}_${index}}_card`}
-						getTaskProgress={getTaskProgress}
-						task={task}
+  return (
+    <ScrollView
+      contentContainerStyle={styles.overviewScrollContainer}
+      alwaysBounceHorizontal={false}
+      showsHorizontalScrollIndicator={false}
+      style={styles.overviewScroll}
+      horizontal={true}
+    >
+      {tasks
+        .filter((task) => task.status === status)
+        .map((task, index) => (
+          <TaskCard
+            key={`${task.taskName}_${index}}_card`}
+            getTaskProgress={getTaskProgress}
+            task={task}
             navigation={navigation}
-					/>
-				))}
-		</ScrollView>
-	)
+          />
+        ))}
+    </ScrollView>
+  )
 }

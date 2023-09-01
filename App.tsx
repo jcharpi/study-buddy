@@ -17,21 +17,21 @@ const height = Dimensions.get("screen").height
 const rem = height > 830 ? 24 : 19
 
 EStyleSheet.build({
-	$rem: rem,
+  $rem: rem,
 })
 
 export default function App() {
   AsyncStorage.clear()
   const theme = useTheme()
-	theme.colors.primary = "black"
-	theme.colors.secondaryContainer = "transparent"
-	theme.colors.background = "white"
+  theme.colors.primary = "black"
+  theme.colors.secondaryContainer = "transparent"
+  theme.colors.background = "white"
 
-	return (
-		<Provider store={store}>
-			<PersistGate loading={null} persistor={persistor}>
-				<StudyBuddyLayout/>
-			</PersistGate>
-		</Provider>
-	)
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <StudyBuddyLayout />
+      </PersistGate>
+    </Provider>
+  )
 }

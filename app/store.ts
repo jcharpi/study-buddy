@@ -2,14 +2,14 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
 import { combineReducers } from "@reduxjs/toolkit"
 import {
-	persistStore,
-	persistReducer,
-	FLUSH,
-	REHYDRATE,
-	PAUSE,
-	PERSIST,
-	PURGE,
-	REGISTER,
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
 } from "redux-persist"
 
 // STORAGE
@@ -23,36 +23,36 @@ import navigationSlice from "../reducers/navigationSlice"
 
 const rootReducer = combineReducers({
   addTaskSlice: addTaskSlice,
-	taskSlice: taskSlice,
-	totalProgressSlice: totalProgressSlice,
-  navigationSlice: navigationSlice
+  taskSlice: taskSlice,
+  totalProgressSlice: totalProgressSlice,
+  navigationSlice: navigationSlice,
 })
 
 const persistConfig = {
-	key: "root",
-	storage: AsyncStorage,
-	blacklist: [],
+  key: "root",
+  storage: AsyncStorage,
+  blacklist: [],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export const store = configureStore({
-	reducer: persistedReducer,
-	middleware: (getDefaultMiddleware) =>
-		getDefaultMiddleware({
-			serializableCheck: {
-				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-			},
-		}),
-	devTools: process.env.NODE_ENV !== "production",
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+  devTools: process.env.NODE_ENV !== "production",
 })
 
 export const persistor = persistStore(store)
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>
 export type AppThunk<ReturnType = void> = ThunkAction<
-	ReturnType,
-	RootState,
-	unknown,
-	Action<string>
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
 >
